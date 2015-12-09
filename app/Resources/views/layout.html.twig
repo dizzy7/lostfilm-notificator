@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>{% block title %}Lostfilm notificator{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}" />
+        {% stylesheets '../app/Resources/public/scss/*' filter='cssrewrite' output='css/compiled/app.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+    {% endblock %}
+
+    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path('app_index') }}">Lostfilm notificator</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.username }}<b
+                                        class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('fos_user_security_logout') }}">Выйти</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('fos_user_registration_register') }}">Регистрация</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('fos_user_security_login') }}">Войти</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid">
+
+        <h1>{% block h1 %}Lostfilm notificator{% endblock %}</h1>
+        {% block body %}
+
+        {% endblock %}
+
+    </div>
+
+</div>
+
+{% block js %}
+    {{ include(':_blocks:js.html.twig') }}
+{% endblock %}
+</body>
+</html>

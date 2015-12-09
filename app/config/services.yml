@@ -1,0 +1,9 @@
+parameters:
+
+services:
+    app.http_grabber:
+        class: AppBundle\Service\HttpGrabber
+        arguments: [@guzzle.client.lostfilm]
+
+    simple_dom_parser:
+        class: Sunra\PhpSimple\HtmlDomParser
