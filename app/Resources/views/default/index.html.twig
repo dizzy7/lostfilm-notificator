@@ -3,6 +3,10 @@
 {% block title %}Добро пожаловать в Lostfilm notificator{% endblock %}
 
 {% block body %}
-
+    {{ form_start(form) }}
+        <button type="submit" class="btn btn-default btn-success">Сохранить</button>
+        {{ form_widget(form.subscribedShows) }}
+        <button type="submit" class="btn btn-default btn-success">Сохранить</button>
+    {{ form_end(form) }}
 {% endblock %}
 

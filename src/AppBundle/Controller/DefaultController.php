@@ -2,20 +2,35 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\SubscriptionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="app_index")
+     * @Route("/")
+     * @Security("has_role('ROLE_USER')")
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-        ));
+        $user = $this->getUser();
+        $form = $this->createForm(new SubscriptionType(), $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dm = $this->get('doctrine.odm.mongodb.document_manager');
+            $dm->flush();
+        }
+
+        return $this->render(
+            'default/index.html.twig',
+            [
+                'form' => $form->createView()
+            ]
+        );
     }
 }

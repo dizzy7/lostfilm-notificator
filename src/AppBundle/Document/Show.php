@@ -47,7 +47,7 @@ class Show
     private $episodes;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="\AppBundle\Document\User")
+     * @MongoDB\ReferenceMany(targetDocument="\AppBundle\Document\User", mappedBy="subscribedShow")
      */
     private $subscribers;
 
@@ -173,5 +173,10 @@ class Show
         }
 
         return null;
+    }
+
+    public function __toString()
+    {
+        return (string)$this->title;
     }
 }
