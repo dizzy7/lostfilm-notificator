@@ -6,7 +6,7 @@ namespace AppBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document(repositoryClass="OptionRepository")
+ * @MongoDB\Document(repositoryClass="AppBundle\Repository\OptionRepository")
  */
 class Option
 {
@@ -42,31 +42,25 @@ class Option
         $this->id = $id;
     }
 
-    /**
-     * @return mixed
-     */
     public function getStringValue()
     {
         return $this->stringValue;
     }
 
-    /**
-     * @param mixed $stringValue
-     */
     public function setStringValue($stringValue)
     {
         $this->stringValue = $stringValue;
     }
 
     /**
-     * @return \MongoDate
+     * @return \DateTime
      */
     public function getDateValue()
     {
         return $this->dateValue;
     }
 
-    public function setDateValue(\MongoDate $dateValue)
+    public function setDateValue(\DateTime $dateValue)
     {
         $this->dateValue = $dateValue;
     }

@@ -12,7 +12,7 @@ class Options implements FixtureInterface
     {
         $lastUpdate = new Option();
         $lastUpdate->setId(Option::LAST_UPDATE);
-        $lastUpdate->setDateValue(new \MongoDate(0));
+        $lastUpdate->setDateValue(new \DateTime('1970-01-01'));
 
         $manager->persist($lastUpdate);
         $manager->flush();

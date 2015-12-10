@@ -2,10 +2,12 @@
 
 namespace AppBundle\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="AppBundle\Repository\ShowRepository")
  */
 class Show
 {
@@ -17,7 +19,7 @@ class Show
     /**
      * @MongoDB\String()
      */
-    private $name;
+    private $title;
 
     /**
      * @MongoDB\String()
@@ -49,116 +51,92 @@ class Show
      */
     private $subscribers;
 
-    /**
-     * @return mixed
-     */
+    public function __construct()
+    {
+        $this->episodes = new ArrayCollection();
+        $this->subscribers = new ArrayCollection();
+    }
+
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param mixed $id
-     */
     public function setId($id)
     {
         $this->id = $id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getEnd()
     {
         return $this->end;
     }
 
-    /**
-     * @param mixed $end
-     */
     public function setEnd($end)
     {
         $this->end = $end;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @param mixed $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
 
     /**
-     * @return mixed
+     * @return Episode[]|Collection
      */
     public function getEpisodes()
     {
         return $this->episodes;
     }
 
-    /**
-     * @param mixed $episodes
-     */
-    public function setEpisodes($episodes)
+    public function addEpisode(Episode $episode)
     {
-        $this->episodes = $episodes;
+        $this->episodes->add($episode);
+    }
+
+    public function removeEpisode(Episode $episode)
+    {
+        $this->episodes->removeElement($episode);
     }
 
     /**
-     * @return mixed
+     * @return User[]|Collection
      */
     public function getSubscribers()
     {
         return $this->subscribers;
     }
 
-    /**
-     * @param mixed $subscribers
-     */
-    public function setSubscribers($subscribers)
+    public function addSubscriber(User $user)
     {
-        $this->subscribers = $subscribers;
+        $this->subscribers->add($user);
+    }
+
+    public function removeSubscriber(User $user)
+    {
+        $this->subscribers->removeElement($user);
     }
 
     public function getUrl()
@@ -169,5 +147,31 @@ class Show
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    public function getEpisodeByNumbers($seasonNumber, $episodeNumber)
+    {
+        $episodes = $this->getEpisodes()->filter(function (Episode $episode) use ($seasonNumber, $episodeNumber) {
+            return $episode->getSeasonNumber() === $seasonNumber && $episode->getEpisodeNumber() === $episodeNumber;
+        });
+
+        if ($episodes->count() > 0) {
+            return $episodes->get(0);
+        }
+
+        return null;
     }
 }

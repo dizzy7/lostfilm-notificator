@@ -31,7 +31,6 @@ class UpdateShowsCommand extends ContainerAwareCommand
             return 1;
         }
 
-
         $dom = $domParser->str_get_html($showsPage);
         /** @var \simple_html_dom_node $centerContent */
         $centerContent = $dom->find('div.mid')[0];
@@ -40,12 +39,12 @@ class UpdateShowsCommand extends ContainerAwareCommand
 
         foreach ($showLinks as $showLink) {
             $name = str_replace(["\n", "\r"], '', $showLink->text());
-            $show = $showRepository->findOneBy(['name' => $name]);
+            $show = $showRepository->findOneBy(['title' => $name]);
             if ($show === null) {
                 $show = new Show();
-                $show->setName($name);
-                $show->setCreatedAt(new \MongoDate());
-                $show->setUpdatedAt(new \MongoDate());
+                $show->setTitle($name);
+                $show->setCreatedAt(new \DateTime());
+                $show->setUpdatedAt(new \DateTime());
                 $show->setUrl($showLink->attr['href']);
                 $dm->persist($show);
 

@@ -14,5 +14,4 @@ class User extends BaseUser
      * @MongoDB\Id(strategy="uuid")
      */
     protected $id;
-
 }

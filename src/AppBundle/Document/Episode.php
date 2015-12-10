@@ -2,6 +2,7 @@
 
 namespace AppBundle\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -12,22 +13,22 @@ class Episode
     /**
      * @MongoDB\Integer()
      */
-    private $season;
+    private $seasonNumber;
 
     /**
      * @MongoDB\Integer()
      */
-    private $episode;
+    private $episodeNumber;
 
     /**
      * @MongoDB\String()
      */
-    private $name;
+    private $title;
 
     /**
-     * @MongoDB\String()
+     * @MongoDB\EmbedMany(targetDocument="Link")
      */
-    private $link;
+    private $links;
 
     /**
      * @MongoDB\Date()
@@ -39,99 +40,79 @@ class Episode
      */
     private $updatedAt;
 
-    /**
-     * @return mixed
-     */
-    public function getSeason()
+    public function __construct()
     {
-        return $this->season;
+        $this->links = new ArrayCollection();
+    }
+
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
+    public function addLink(Link $link)
+    {
+        $this->links->add($link);;
+    }
+
+    public function removeLink(Link $link)
+    {
+        $this->links->removeElement($link);
     }
 
     /**
-     * @param mixed $season
-     */
-    public function setSeason($season)
-    {
-        $this->season = $season;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEpisode()
-    {
-        return $this->episode;
-    }
-
-    /**
-     * @param mixed $episode
-     */
-    public function setEpisode($episode)
-    {
-        $this->episode = $episode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLink()
-    {
-        return $this->link;
-    }
-
-    /**
-     * @param mixed $link
-     */
-    public function setLink($link)
-    {
-        $this->link = $link;
-    }
-
-    /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @param mixed $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getSeasonNumber()
+    {
+        return $this->seasonNumber;
+    }
+
+    public function setSeasonNumber($seasonNumber)
+    {
+        $this->seasonNumber = $seasonNumber;
+    }
+
+    public function getEpisodeNumber()
+    {
+        return $this->episodeNumber;
+    }
+
+    public function setEpisodeNumber($episodeNumber)
+    {
+        $this->episodeNumber = $episodeNumber;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

@@ -15,6 +15,6 @@ class OptionRepository extends DocumentRepository
         /** @var Option $option */
         $option = $this->findOneBy(['id' => Option::LAST_UPDATE]);
 
-        return $option->getDateValue()->toDateTime();
+        return $option->getDateValue();
     }
 }
