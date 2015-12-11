@@ -4,6 +4,7 @@
 parameters:
     mongo_url: mongodb://localhost:27017
     mongo_database: lostfilm
+    mongo_session_collection: Session
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1

@@ -1,6 +1,14 @@
 parameters:
 
 services:
+    mongo_client:
+            class: MongoClient
+            arguments: [%mongo_url%]
+    session.handler.mongo:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MongoDbSessionHandler
+        arguments:
+          - @mongo_client
+          - {database: %mongo_database%, collection: %mongo_session_collection% }
     app.http_grabber:
         class: AppBundle\Service\HttpGrabber
         arguments: [@guzzle.client.lostfilm]
