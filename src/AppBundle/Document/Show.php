@@ -8,6 +8,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * @MongoDB\Document(repositoryClass="AppBundle\Repository\ShowRepository")
+ * @MongoDB\HasLifecycleCallbacks()
  */
 class Show
 {
@@ -32,7 +33,7 @@ class Show
     private $end;
 
     /**
-     * @@MongoDB\Date()
+     * @MongoDB\Date()
      */
     private $createdAt;
 
@@ -47,14 +48,23 @@ class Show
     private $episodes;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="\AppBundle\Document\User", mappedBy="subscribedShow")
+     * @MongoDB\ReferenceMany(targetDocument="\AppBundle\Document\User", mappedBy="subscribedShows")
      */
     private $subscribers;
+
 
     public function __construct()
     {
         $this->episodes = new ArrayCollection();
         $this->subscribers = new ArrayCollection();
+    }
+
+    /**
+     * @MongoDB\PreUpdate()
+     */
+    public function updatedates()
+    {
+        $this->createdAt = new \DateTime();
     }
 
     public function getId()
@@ -178,5 +188,15 @@ class Show
     public function __toString()
     {
         return (string)$this->title;
+    }
+
+    /**
+     * @return Episode[]|Collection
+     */
+    public function getNewEpisodes()
+    {
+        return $this->getEpisodes()->filter(function (Episode $episode) {
+            return !$episode->getIsNotificationSended();
+        });
     }
 }

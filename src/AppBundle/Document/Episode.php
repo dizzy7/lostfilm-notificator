@@ -40,6 +40,11 @@ class Episode
      */
     private $updatedAt;
 
+    /**
+     * @MongoDB\Boolean()
+     */
+    private $isNotificationSended = false;
+
     public function __construct()
     {
         $this->links = new ArrayCollection();
@@ -114,5 +119,15 @@ class Episode
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+
+    public function getIsNotificationSended()
+    {
+        return $this->isNotificationSended;
+    }
+
+    public function setIsNotificationSended($isNotificationSended)
+    {
+        $this->isNotificationSended = $isNotificationSended;
     }
 }

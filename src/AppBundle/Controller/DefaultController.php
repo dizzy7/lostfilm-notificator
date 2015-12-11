@@ -24,6 +24,8 @@ class DefaultController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $dm = $this->get('doctrine.odm.mongodb.document_manager');
             $dm->flush();
+
+            return $this->redirect($this->generateUrl('app_default_index'));
         }
 
         return $this->render(
