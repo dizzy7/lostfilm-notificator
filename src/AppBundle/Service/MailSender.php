@@ -42,7 +42,7 @@ class MailSender
 
                     $message->setBody($mail);
                     $message->setCharset('utf-8');
-                    $message->addFrom('nofificator@lf.dizzy.name');
+                    $message->addFrom('notificator@lf.dizzy.name');
                     $message->addTo($user->getEmail());
                     $message->setSubject('Новая серия сериала ' . $show->getTitle());
 
