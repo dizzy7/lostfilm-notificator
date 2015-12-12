@@ -115,8 +115,11 @@ class Parser
 
     private function addEpisodeIfNotExists($title, Show $show)
     {
-        //TODO сделать адекватный способ вырезать название сериала из строки
-        $episodeTitle = 'TODO';
+        $titleBeginAt = mb_strpos($title, ').', 0, 'UTF-8') + 2;
+        $episodeTitle = trim(mb_substr($title, $titleBeginAt, 1024, 'UTF-8'));
+        $episodeTitle = preg_replace('/\[.+?\]/', '', $episodeTitle);
+        $episodeTitle = preg_replace('/\(S\d+E\d+\)/', '', $episodeTitle);
+        $episodeTitle = trim($episodeTitle, ' .');
 
         $matches = [];
         if (preg_match('/\(S(\d+)E(\d+)\)/', $title, $matches)) {
