@@ -14,7 +14,7 @@ class ShowRepository extends DocumentRepository
     public function findWithNewEpisodes()
     {
         $qb = $this->createQueryBuilder();
-        $qb->field('episodes.isNotificationSended')->equals(false);
+        $qb->field('episodes.isNotificationSended')->notEqual(true);
 
         return $qb->getQuery()->execute();
     }

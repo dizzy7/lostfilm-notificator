@@ -10,5 +10,6 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     from_email:        notificator@lf.dizzy.name
+    from_email_sender: Lostfilm notificator
 
     secret:            ThisTokenIsNotSoSecretChangeIt

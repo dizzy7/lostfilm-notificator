@@ -11,13 +11,20 @@ class MailSender
     private $twig;
     private $dm;
     private $fromEmail;
+    private $fromEmailSender;
 
-    public function __construct(\Swift_Mailer $swiftMailer, TwigEngine $twig, DocumentManager $dm, $fromEmail)
-    {
+    public function __construct(
+        \Swift_Mailer $swiftMailer,
+        TwigEngine $twig,
+        DocumentManager $dm,
+        $fromEmail,
+        $fromEmailSender
+    ) {
         $this->swiftMailer = $swiftMailer;
         $this->twig = $twig;
         $this->dm = $dm;
         $this->fromEmail = $fromEmail;
+        $this->fromEmailSender = $fromEmailSender;
     }
 
 
@@ -44,12 +51,15 @@ class MailSender
 
                     $message->setBody($mail);
                     $message->setCharset('utf-8');
-                    $message->addFrom($this->fromEmail);
+                    $message->addFrom($this->fromEmail, $this->fromEmailSender);
                     $message->addTo($user->getEmail());
                     $message->setSubject('Новая серия сериала ' . $show->getTitle());
 
                     $this->swiftMailer->send($message);
                 }
+
+                $newEpisode->setIsNotificationSended(true);
+                $this->dm->flush();
             }
         }
     }

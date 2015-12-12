@@ -78,6 +78,12 @@ fos_user:
     db_driver: mongodb
     firewall_name: main
     user_class: AppBundle\Document\User
+    from_email:
+        address:        %from_email%
+        sender_name:    %from_email_sender%
+    registration:
+        confirmation:
+            enabled:    true
 
 
 braincrafted_bootstrap:

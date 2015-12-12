@@ -18,3 +18,4 @@ services:
             - @monolog.logger.applog
             - @doctrine.odm.mongodb.document_manager
             - %from_email%
+            - %from_email_sender%
