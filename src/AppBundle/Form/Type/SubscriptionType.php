@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form;
+namespace AppBundle\Form\Type;
 
 use AppBundle\Document\Show;
 use AppBundle\Document\User;
@@ -17,12 +17,12 @@ class SubscriptionType extends AbstractType
             'subscribedShows',
             'document',
             [
-                'class'=> Show::class,
+                'class' => Show::class,
                 'expanded' => true,
                 'multiple' => true,
                 'query_builder' => function (ShowRepository $repository) {
                     return $repository->findActiveShowsQueryBuilder();
-                }
+                },
             ]
         );
     }
@@ -35,7 +35,7 @@ class SubscriptionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class
+            'data_class' => User::class,
         ]);
     }
 }

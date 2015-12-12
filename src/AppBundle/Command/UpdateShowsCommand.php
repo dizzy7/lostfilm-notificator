@@ -23,7 +23,7 @@ class UpdateShowsCommand extends ContainerAwareCommand
         try {
             $showsPage = iconv('windows-1251', 'utf-8', $grabber->getPage('/serials.php'));
         } catch (\Exception $e) {
-            $logger->error('Ошибка загрузки страницы с сериалами: ' . $e->getMessage());
+            $logger->error('Ошибка загрузки страницы с сериалами: '.$e->getMessage());
 
             return 1;
         }
@@ -41,7 +41,7 @@ class UpdateShowsCommand extends ContainerAwareCommand
 
                 sleep(mt_rand(1, 5));
             } catch (\Exception $e) {
-                $logger->error('Ошибка загрузки страницы сериала ' . $show->getTitle() . ':' . $e->getMessage());
+                $logger->error('Ошибка загрузки страницы сериала '.$show->getTitle().':'.$e->getMessage());
                 sleep(60);
             }
         }

@@ -3,6 +3,7 @@
 namespace AppBundle\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -43,13 +44,16 @@ class Episode
     /**
      * @MongoDB\Boolean()
      */
-    private $isNotificationSended = false;
+    private $notificationSended = false;
 
     public function __construct()
     {
         $this->links = new ArrayCollection();
     }
 
+    /**
+     * @return Link[]|Collection
+     */
     public function getLinks()
     {
         return $this->links;
@@ -57,7 +61,7 @@ class Episode
 
     public function addLink(Link $link)
     {
-        $this->links->add($link);;
+        $this->links->add($link);
     }
 
     public function removeLink(Link $link)
@@ -121,13 +125,13 @@ class Episode
         $this->title = $title;
     }
 
-    public function getIsNotificationSended()
+    public function isNotificationSended()
     {
-        return $this->isNotificationSended;
+        return $this->notificationSended;
     }
 
-    public function setIsNotificationSended($isNotificationSended)
+    public function setNotificationSended($notificationSended)
     {
-        $this->isNotificationSended = $isNotificationSended;
+        $this->notificationSended = $notificationSended;
     }
 }

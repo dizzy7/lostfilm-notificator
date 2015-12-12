@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use AppBundle\Document\Episode;
+use AppBundle\Document\Link;
 use AppBundle\Document\Show;
 use AppBundle\Repository\OptionRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -24,7 +25,7 @@ class Parser
 
     public function parseRss(\SimpleXMLElement $rss)
     {
-        $lastRssBuildDate = \DateTime::createFromFormat(\DateTime::RSS, (string)$rss->channel->lastBuildDate);
+        $lastRssBuildDate = \DateTime::createFromFormat(\DateTime::RSS, (string) $rss->channel->lastBuildDate);
         /** @var OptionRepository $optionRepository */
         $optionRepository = $this->dm->getRepository('AppBundle:Option');
         $lastUpdate = $optionRepository->getLastUpdateDate();
@@ -55,11 +56,11 @@ class Parser
                 $show->setUrl($showLink->attr['href']);
                 $this->dm->persist($show);
 
-                $this->logger->info('Добавлен новый сериал: ' . $name);
+                $this->logger->info('Добавлен новый сериал: '.$name);
             }
-
-            $this->dm->flush();
         }
+
+        $this->dm->flush();
     }
 
     public function updateShowStatus(Show $show, $showPage)
@@ -68,8 +69,8 @@ class Parser
         /** @var \simple_html_dom_node $centerContent */
         $centerContent = $dom->find('div.mid')[0];
         if (mb_strpos($centerContent->text(), 'Статус: закончен', 0, 'UTF-8') !== false) {
-            $show->setIsClosed(true);
-            $this->logger->info('Сериал "' . $show->getTitle() . '" закрыт');
+            $show->setClosed(true);
+            $this->logger->info('Сериал "'.$show->getTitle().'" закрыт');
             $this->dm->flush();
         }
     }
@@ -80,15 +81,16 @@ class Parser
 
         $shows = $showRepository->findAll();
         foreach ($rss->channel->item as $item) {
-            $title = (string)$item->title;
+            $title = (string) $item->title;
+            $link = (string) $item->link;
             $show = $this->findShowByEpisodeTitle($shows, $title);
 
             if ($show === null) {
-                $this->logger->error('Сериал для эпизода не найден:' . $title);
+                $this->logger->error('Сериал для эпизода не найден:'.$title);
                 continue;
             }
 
-            $this->addEpisodeIfNotExists($title, $show);
+            $this->addEpisodeIfNotExists($show, $title, $link);
         }
 
         $this->dm->flush();
@@ -97,7 +99,8 @@ class Parser
     /**
      * @param $shows Show[]
      * @param $title
-     * @return Show
+     *
+     * @return Show|null
      */
     private function findShowByEpisodeTitle($shows, $title)
     {
@@ -110,10 +113,10 @@ class Parser
             }
         }
 
-        return null;
+        return;
     }
 
-    private function addEpisodeIfNotExists($title, Show $show)
+    private function addEpisodeIfNotExists(Show $show, $title, $link)
     {
         $titleBeginAt = mb_strpos($title, ').', 0, 'UTF-8') + 2;
         $episodeTitle = trim(mb_substr($title, $titleBeginAt, 1024, 'UTF-8'));
@@ -123,11 +126,13 @@ class Parser
 
         $matches = [];
         if (preg_match('/\(S(\d+)E(\d+)\)/', $title, $matches)) {
-            $seasonNumber = (int)$matches[1];
-            $episodeNumber = (int)$matches[2];
+            $seasonNumber = (int) $matches[1];
+            $episodeNumber = (int) $matches[2];
 
             $episode = $show->getEpisodeByNumbers($seasonNumber, $episodeNumber);
             if ($episode !== null) {
+                $this->addLinkToEpisode($episode, $link);
+
                 return;
             }
 
@@ -136,8 +141,7 @@ class Parser
             $episode->setTitle($episodeTitle);
             $episode->setSeasonNumber($seasonNumber);
             $episode->setEpisodeNumber($episodeNumber);
-            //TODO создание массива ссылок на торрент-файлы эпизода
-            //$episode->addLink();
+            $this->addLinkToEpisode($episode, $link);
 
             $show->addEpisode($episode);
             $this->logger->info(
@@ -149,5 +153,29 @@ class Parser
                 )
             );
         }
+    }
+
+    private function addLinkToEpisode(Episode $episode, $url)
+    {
+        $existLinks = $episode->getLinks()->map(function (Link $link) {
+            return $link->getUrl();
+        })->toArray();
+
+        if (in_array($url, $existLinks, true)) {
+            return;
+        }
+
+        $resolution = 'SD';
+        if (strpos($url, '.720p.')) {
+            $resolution = '720p';
+        } elseif (strpos($url, '.1080p') !== false) {
+            $resolution = '1080p';
+        }
+
+        $link = new Link();
+        $link->setUrl($url);
+        $link->setResolution($resolution);
+
+        $episode->addLink($link);
     }
 }

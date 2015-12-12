@@ -22,7 +22,7 @@ class HttpGrabber implements HttpGrabberInterface
 
             return (string) $result->getBody();
         } catch (ClientException $e) {
-            throw new \Exception('Не удалось получить данные: ' . $e->getMessage());
+            throw new \Exception('Не удалось получить данные: '.$e->getMessage());
         }
     }
 }

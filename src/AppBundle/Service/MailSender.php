@@ -31,7 +31,6 @@ class MailSender
         $this->fromEmailSender = $fromEmailSender;
     }
 
-
     public function sendNewEpisodeNotifications()
     {
         $showRepository = $this->dm->getRepository('AppBundle:Show');
@@ -42,10 +41,10 @@ class MailSender
             $newEpisodes = $show->getNewEpisodes();
             foreach ($newEpisodes as $newEpisode) {
                 $mail = $this->twig->render(
-                    'mail/notification.txt.twig',
+                    'mail/notification.html.twig',
                     [
                         'show' => $show,
-                        'episode' => $newEpisode
+                        'episode' => $newEpisode,
                     ]
                 );
 
@@ -57,7 +56,8 @@ class MailSender
                     $message->setCharset('utf-8');
                     $message->addFrom($this->fromEmail, $this->fromEmailSender);
                     $message->addTo($user->getEmail());
-                    $message->setSubject('Новая серия сериала ' . $show->getTitle());
+                    $message->setSubject('Новая серия сериала '.$show->getTitle());
+                    $message->setContentType('text/html');
 
                     $this->swiftMailer->send($message);
                     $this->logger->info(
@@ -73,8 +73,9 @@ class MailSender
                 }
 
                 $newEpisode->setIsNotificationSended(true);
-                $this->dm->flush();
             }
+
+            $this->dm->flush();
         }
     }
 }

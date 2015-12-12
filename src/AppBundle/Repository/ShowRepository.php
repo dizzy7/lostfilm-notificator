@@ -2,7 +2,6 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Document\Option;
 use AppBundle\Document\Show;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
@@ -14,7 +13,7 @@ class ShowRepository extends DocumentRepository
     public function findWithNewEpisodes()
     {
         $qb = $this->createQueryBuilder();
-        $qb->field('episodes.isNotificationSended')->notEqual(true);
+        $qb->field('episodes.notificationSended')->notEqual(true);
 
         return $qb->getQuery()->execute();
     }

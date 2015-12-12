@@ -27,7 +27,6 @@ class User extends BaseUser
         $this->subscribedShows = new ArrayCollection();
     }
 
-
     /**
      * @return Show[]
      */

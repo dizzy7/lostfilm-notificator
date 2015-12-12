@@ -30,7 +30,7 @@ class Show
     /**
      * @MongoDB\Boolean()
      */
-    private $isClosed = false;
+    private $closed = false;
 
     /**
      * @MongoDB\Date()
@@ -51,7 +51,6 @@ class Show
      * @MongoDB\ReferenceMany(targetDocument="\AppBundle\Document\User", mappedBy="subscribedShows")
      */
     private $subscribers;
-
 
     public function __construct()
     {
@@ -162,6 +161,9 @@ class Show
         $this->title = $title;
     }
 
+    /**
+     * @return Episode|null
+     */
     public function getEpisodeByNumbers($seasonNumber, $episodeNumber)
     {
         $episodes = $this->getEpisodes()->filter(function (Episode $episode) use ($seasonNumber, $episodeNumber) {
@@ -172,12 +174,12 @@ class Show
             return $episodes->get(0);
         }
 
-        return null;
+        return;
     }
 
     public function __toString()
     {
-        return (string)$this->title;
+        return (string) $this->title;
     }
 
     /**
@@ -186,17 +188,17 @@ class Show
     public function getNewEpisodes()
     {
         return $this->getEpisodes()->filter(function (Episode $episode) {
-            return !$episode->getIsNotificationSended();
+            return !$episode->isNotificationSended();
         });
     }
 
-    public function getIsClosed()
+    public function isClosed()
     {
-        return $this->isClosed;
+        return $this->closed;
     }
 
-    public function setIsClosed($isClosed)
+    public function setClosed($closed)
     {
-        $this->isClosed = $isClosed;
+        $this->closed = $closed;
     }
 }

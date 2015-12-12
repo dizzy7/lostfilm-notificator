@@ -23,7 +23,7 @@ class UpdateEpisodesCommand extends ContainerAwareCommand
         try {
             $rssFeed = $grabber->getPage('/rssdd.xml');
         } catch (\Exception $e) {
-            $logger->error('Ошибка загрузки rss:' . $e->getMessage());
+            $logger->error('Ошибка загрузки rss:'.$e->getMessage());
 
             return 1;
         }
