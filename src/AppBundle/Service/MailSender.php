@@ -3,12 +3,14 @@
 namespace AppBundle\Service;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\TwigEngine;
 
 class MailSender
 {
     private $swiftMailer;
     private $twig;
+    private $logger;
     private $dm;
     private $fromEmail;
     private $fromEmailSender;
@@ -16,12 +18,14 @@ class MailSender
     public function __construct(
         \Swift_Mailer $swiftMailer,
         TwigEngine $twig,
+        LoggerInterface $logger,
         DocumentManager $dm,
         $fromEmail,
         $fromEmailSender
     ) {
         $this->swiftMailer = $swiftMailer;
         $this->twig = $twig;
+        $this->logger = $logger;
         $this->dm = $dm;
         $this->fromEmail = $fromEmail;
         $this->fromEmailSender = $fromEmailSender;
@@ -56,6 +60,16 @@ class MailSender
                     $message->setSubject('Новая серия сериала ' . $show->getTitle());
 
                     $this->swiftMailer->send($message);
+                    $this->logger->info(
+                        sprintf(
+                            'Отправлено письмо пользователю %s, сериал %s, эпизод %s (S%dE%d)',
+                            $user->getEmail(),
+                            $show->getTitle(),
+                            $newEpisode->getTitle(),
+                            $newEpisode->getSeasonNumber(),
+                            $newEpisode->getEpisodeNumber()
+                        )
+                    );
                 }
 
                 $newEpisode->setIsNotificationSended(true);
