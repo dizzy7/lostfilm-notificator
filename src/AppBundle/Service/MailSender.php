@@ -2,6 +2,8 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Document\Episode;
+use AppBundle\Document\Show;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\TwigEngine;
@@ -48,34 +50,39 @@ class MailSender
                     ]
                 );
 
-                foreach ($show->getSubscribers() as $user) {
-                    /** @var \Swift_Message $message */
-                    $message = $this->swiftMailer->createMessage();
-
-                    $message->setBody($mail);
-                    $message->setCharset('utf-8');
-                    $message->addFrom($this->fromEmail, $this->fromEmailSender);
-                    $message->addTo($user->getEmail());
-                    $message->setSubject('Новая серия сериала '.$show->getTitle());
-                    $message->setContentType('text/html');
-
-                    $this->swiftMailer->send($message);
-                    $this->logger->info(
-                        sprintf(
-                            'Отправлено письмо пользователю %s, сериал %s, эпизод %s (S%dE%d)',
-                            $user->getEmail(),
-                            $show->getTitle(),
-                            $newEpisode->getTitle(),
-                            $newEpisode->getSeasonNumber(),
-                            $newEpisode->getEpisodeNumber()
-                        )
-                    );
-                }
+                $this->sendEmail($show, $mail, $newEpisode);
 
                 $newEpisode->setIsNotificationSended(true);
             }
+        }
 
-            $this->dm->flush();
+        $this->dm->flush();
+    }
+
+    private function sendEmail(Show $show, $mail, Episode $newEpisode)
+    {
+        foreach ($show->getSubscribers() as $user) {
+            /** @var \Swift_Message $message */
+            $message = $this->swiftMailer->createMessage();
+
+            $message->setBody($mail);
+            $message->setCharset('utf-8');
+            $message->addFrom($this->fromEmail, $this->fromEmailSender);
+            $message->addTo($user->getEmail());
+            $message->setSubject('Новая серия сериала ' . $show->getTitle());
+            $message->setContentType('text/html');
+
+            $this->swiftMailer->send($message);
+            $this->logger->info(
+                sprintf(
+                    'Отправлено письмо пользователю %s, сериал %s, эпизод %s (S%dE%d)',
+                    $user->getEmail(),
+                    $show->getTitle(),
+                    $newEpisode->getTitle(),
+                    $newEpisode->getSeasonNumber(),
+                    $newEpisode->getEpisodeNumber()
+                )
+            );
         }
     }
 }
