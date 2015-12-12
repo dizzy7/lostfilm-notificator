@@ -52,7 +52,7 @@ class MailSender
 
                 $this->sendEmail($show, $mail, $newEpisode);
 
-                $newEpisode->setIsNotificationSended(true);
+                $newEpisode->setNotificationSended(true);
             }
         }
 
