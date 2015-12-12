@@ -30,7 +30,7 @@ class Show
     /**
      * @MongoDB\Boolean()
      */
-    private $end;
+    private $isClosed = false;
 
     /**
      * @MongoDB\Date()
@@ -75,16 +75,6 @@ class Show
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    public function getEnd()
-    {
-        return $this->end;
-    }
-
-    public function setEnd($end)
-    {
-        $this->end = $end;
     }
 
     /**
@@ -198,5 +188,15 @@ class Show
         return $this->getEpisodes()->filter(function (Episode $episode) {
             return !$episode->getIsNotificationSended();
         });
+    }
+
+    public function getIsClosed()
+    {
+        return $this->isClosed;
+    }
+
+    public function setIsClosed($isClosed)
+    {
+        $this->isClosed = $isClosed;
     }
 }

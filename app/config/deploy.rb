@@ -1,4 +1,4 @@
-logger.level = Logger::MAX_LEVEL
+#logger.level = Logger::MAX_LEVEL
 
 set :application, "set your application name here"
 set :domain,      "dizzy.name"

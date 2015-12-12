@@ -30,5 +30,22 @@ class UpdateShowsCommand extends ContainerAwareCommand
 
         $parser = $this->getContainer()->get('app.parser');
         $parser->updateShows($showsPage);
+
+        $dm = $this->getContainer()->get('doctrine.odm.mongodb.document_manager');
+        $shows = $dm->getRepository('AppBundle:Show')->findActiveShows();
+
+        foreach ($shows as $show) {
+            try {
+                $showPage = iconv('windows-1251', 'utf-8', $grabber->getPage($show->getUrl()));
+                $parser->updateShowStatus($show, $showPage);
+
+                sleep(mt_rand(1, 5));
+            } catch (\Exception $e) {
+                $logger->error('Ошибка загрузки страницы сериала ' . $show->getTitle() . ':' . $e->getMessage());
+                sleep(60);
+            }
+        }
+
+        return 0;
     }
 }

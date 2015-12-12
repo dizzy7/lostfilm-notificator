@@ -18,4 +18,20 @@ class ShowRepository extends DocumentRepository
 
         return $qb->getQuery()->execute();
     }
+
+    /**
+     * @return Show[]
+     */
+    public function findActiveShows()
+    {
+        return $this->findActiveShowsQueryBuilder()->getQuery()->execute();
+    }
+
+    public function findActiveShowsQueryBuilder()
+    {
+        $qb = $this->createQueryBuilder();
+        $qb->field('isClosed')->equals(false);
+
+        return $qb;
+    }
 }

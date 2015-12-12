@@ -62,6 +62,18 @@ class Parser
         }
     }
 
+    public function updateShowStatus(Show $show, $showPage)
+    {
+        $dom = $this->domParser->str_get_html($showPage);
+        /** @var \simple_html_dom_node $centerContent */
+        $centerContent = $dom->find('div.mid')[0];
+        if (mb_strpos($centerContent->text(), 'Статус: закончен', 0, 'UTF-8') !== false) {
+            $show->setIsClosed(true);
+            $this->logger->info('Сериал "' . $show->getTitle() . '" закрыт');
+            $this->dm->flush();
+        }
+    }
+
     private function parseEpisodes(\SimpleXMLElement $rss)
     {
         $showRepository = $this->dm->getRepository('AppBundle:Show');
@@ -113,7 +125,7 @@ class Parser
 
             $episode = $show->getEpisodeByNumbers($seasonNumber, $episodeNumber);
             if ($episode !== null) {
-                return false;
+                return;
             }
 
             $episode = new Episode();
