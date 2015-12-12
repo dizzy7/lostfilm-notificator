@@ -12,6 +12,7 @@ web_profiler:
     intercept_redirects: false
 
 monolog:
+    channels: [default, applog]
     handlers:
         main:
             type:   stream
@@ -32,6 +33,22 @@ monolog:
                 VERBOSITY_VERY_VERBOSE: NOTICE
                 VERBOSITY_DEBUG: DEBUG
             channels: ["doctrine"]
+        mongo:
+            type:   mongo
+            level:  error
+            mongo:
+                id: mongolog
+                database: %mongo_database%
+                collection: %mongo_log_collection%
+            channels: default
+        mongo_app:
+            type: mongo
+            level: info
+            mongo:
+                id: mongolog
+                database: %mongo_database%
+                collection: %mongo_applog_collection%
+            channels: applog
 
 swiftmailer:
     delivery_address: 7dizzy7@gmail.com

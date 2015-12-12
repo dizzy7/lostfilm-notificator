@@ -1,5 +1,3 @@
-parameters:
-
 services:
     mongo_client:
             class: MongoClient
@@ -11,17 +9,10 @@ services:
           - @mongo_client
           - {database: %mongo_database%, collection: %mongo_session_collection% }
 
-    app.http_grabber:
-        class: AppBundle\Service\HttpGrabber
-        arguments: [@guzzle.client.lostfilm]
-
-    app.rss_parser:
-        class: AppBundle\Service\RssParser
-        arguments: [@doctrine.odm.mongodb.document_manager, @logger]
+    mongolog:
+        class: Doctrine\MongoDB\Connection
+        factory_service: doctrine_mongodb.odm.log_connection
+        factory_method: getMongoClient
 
     simple_dom_parser:
         class: Sunra\PhpSimple\HtmlDomParser
-
-    app.mail_sender:
-        class: AppBundle\Service\MailSender
-        arguments: [@swiftmailer.mailer, @templating, @doctrine.odm.mongodb.document_manager, %from_email%]

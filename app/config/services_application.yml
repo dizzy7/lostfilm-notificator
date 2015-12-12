@@ -1,0 +1,20 @@
+services:
+    app.http_grabber:
+        class: AppBundle\Service\HttpGrabber
+        arguments: [@guzzle.client.lostfilm]
+
+    app.parser:
+        class: AppBundle\Service\Parser
+        arguments:
+            - @doctrine.odm.mongodb.document_manager
+            - @monolog.logger.applog
+            - @simple_dom_parser
+
+    app.mail_sender:
+        class: AppBundle\Service\MailSender
+        arguments:
+            - @swiftmailer.mailer
+            - @templating
+            - @monolog.logger.applog
+            - @doctrine.odm.mongodb.document_manager
+            - %from_email%

@@ -14,14 +14,26 @@ imports:
 #        query_cache_driver: apc
 
 monolog:
+    channels: [default, applog]
     handlers:
         main:
             type:         fingers_crossed
-            action_level: error
-            handler:      nested
-        nested:
-            type:  stream
-            path:  "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
+            action_level: notice
+            handler:      mongo
         console:
             type:  console
+        mongo:
+            type: mongo
+            level: error
+            mongo:
+                id: mongolog
+                database: %mongo_database%
+                collection: %mongo_log_collection%
+        mongo_app:
+            type: mongo
+            level: info
+            mongo:
+                id: mongolog
+                database: %mongo_database%
+                collection: %mongo_applog_collection%
+            channels: applog

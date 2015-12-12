@@ -2,11 +2,13 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: services_application.yml }
 
 parameters:
     locale: ru_RU
     mongo_session_collection: Session
-
+    mongo_log_collection: Log
+    mongo_applog_collection: ApplicationLog
 
 framework:
     #esi:             ~
@@ -52,10 +54,17 @@ doctrine_mongodb:
         default:
             server: %mongo_url%
             options: {}
+        log:
+            server: %mongo_url%
+            options:
+                connect: true
     default_database: %mongo_database%
     document_managers:
         default:
             auto_mapping: true
+        log:
+            auto_mapping: false
+            logging: false
 
 # Swiftmailer Configuration
 swiftmailer:

@@ -7,16 +7,19 @@ use AppBundle\Document\Show;
 use AppBundle\Repository\OptionRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Psr\Log\LoggerInterface;
+use Sunra\PhpSimple\HtmlDomParser;
 
-class RssParser
+class Parser
 {
     private $dm;
     private $logger;
+    private $domParser;
 
-    public function __construct(DocumentManager $dm, LoggerInterface $logger)
+    public function __construct(DocumentManager $dm, LoggerInterface $logger, HtmlDomParser $domParser)
     {
         $this->dm = $dm;
         $this->logger = $logger;
+        $this->domParser = $domParser;
     }
 
     public function parseRss(\SimpleXMLElement $rss)
@@ -32,6 +35,33 @@ class RssParser
         return 0;
     }
 
+    public function updateShows($showsPage)
+    {
+        $showRepository = $this->dm->getRepository('AppBundle:Show');
+        $dom = $this->domParser->str_get_html($showsPage);
+        /** @var \simple_html_dom_node $centerContent */
+        $centerContent = $dom->find('div.mid')[0];
+        /** @var \simple_html_dom_node[] $showLinks */
+        $showLinks = $centerContent->find('a.bb_a');
+
+        foreach ($showLinks as $showLink) {
+            $name = str_replace(["\n", "\r"], '', $showLink->text());
+            $show = $showRepository->findOneBy(['title' => $name]);
+            if ($show === null) {
+                $show = new Show();
+                $show->setTitle($name);
+                $show->setCreatedAt(new \DateTime());
+                $show->setUpdatedAt(new \DateTime());
+                $show->setUrl($showLink->attr['href']);
+                $this->dm->persist($show);
+
+                $this->logger->info('Добавлен новый сериал: ' . $name);
+            }
+
+            $this->dm->flush();
+        }
+    }
+
     private function parseEpisodes(\SimpleXMLElement $rss)
     {
         $showRepository = $this->dm->getRepository('AppBundle:Show');
@@ -42,7 +72,7 @@ class RssParser
             $show = $this->findShowByEpisodeTitle($shows, $title);
 
             if ($show === null) {
-                $this->logger->alert('Сериал для эпизода не найден:' . $title);
+                $this->logger->error('Сериал для эпизода не найден:' . $title);
                 continue;
             }
 
