@@ -10,12 +10,14 @@ class MailSender
     private $swiftMailer;
     private $twig;
     private $dm;
+    private $fromEmail;
 
-    public function __construct(\Swift_Mailer $swiftMailer, TwigEngine $twig, DocumentManager $dm)
+    public function __construct(\Swift_Mailer $swiftMailer, TwigEngine $twig, DocumentManager $dm, $fromEmail)
     {
         $this->swiftMailer = $swiftMailer;
         $this->twig = $twig;
         $this->dm = $dm;
+        $this->fromEmail = $fromEmail;
     }
 
 
@@ -42,7 +44,7 @@ class MailSender
 
                     $message->setBody($mail);
                     $message->setCharset('utf-8');
-                    $message->addFrom('notificator@lf.dizzy.name');
+                    $message->addFrom($this->fromEmail);
                     $message->addTo($user->getEmail());
                     $message->setSubject('Новая серия сериала ' . $show->getTitle());
 

@@ -3,10 +3,30 @@
 {% block title %}Добро пожаловать в Lostfilm notificator{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'id': 'subscriptionForm'}}) }}
+    <div class="container submit-button-top">
         <button type="submit" class="btn btn-default btn-success">Сохранить</button>
-        {{ form_widget(form.subscribedShows) }}
+    </div>
+    <table class="table table-striped">
+        <tbody>
+        {% for show in form.subscribedShows %}
+            <tr>
+                <td>{{ form_label(show) }}</td>
+                <td>{{ form_widget(show) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="container submit-button-top">
         <button type="submit" class="btn btn-default btn-success">Сохранить</button>
+    </div>
     {{ form_end(form) }}
 {% endblock %}
 
+{% block customjs %}
+    <script type="text/javascript">
+        $(function() {
+            $(':checkbox').checkboxpicker();
+        });
+    </script>
+{% endblock %}

@@ -24,4 +24,4 @@ services:
 
     app.mail_sender:
         class: AppBundle\Service\MailSender
-        arguments: [@swiftmailer.mailer, @templating, @doctrine.odm.mongodb.document_manager]
+        arguments: [@swiftmailer.mailer, @templating, @doctrine.odm.mongodb.document_manager, %from_email%]

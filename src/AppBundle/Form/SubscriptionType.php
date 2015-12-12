@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Document\Show;
 use AppBundle\Document\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +14,13 @@ class SubscriptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'subscribedShows'
+            'subscribedShows',
+            'document',
+            [
+                'class'=> Show::class,
+                'expanded' => true,
+                'multiple' => true
+            ]
         );
     }
 

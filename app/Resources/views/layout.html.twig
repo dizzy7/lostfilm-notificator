@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}"/>
         {% stylesheets '../app/Resources/public/scss/*' filter='cssrewrite' output='css/compiled/app.css' %}
-            <link rel="stylesheet" href="{{ asset_url }}"/>
+        <link rel="stylesheet" href="{{ asset_url }}"/>
         {% endstylesheets %}
     {% endblock %}
 
@@ -66,7 +66,16 @@
 </div>
 
 {% block js %}
-    {{ include(':_blocks:js.html.twig') }}
+    {% javascripts
+        'bootstrap/js/jquery.js'
+        'bootstrap/js/bootstrap.js'
+        '../app/Resources/public/js/*'
+        output='js/compiled/base.js' %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block customjs %}
 {% endblock %}
 </body>
 </html>
