@@ -13,3 +13,6 @@ parameters:
     from_email_sender: Lostfilm notificator
 
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    ga_tracking: ~ #UA-xxxxxxxx-x
+
