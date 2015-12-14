@@ -5,7 +5,7 @@ imports:
     - { resource: services_application.yml }
 
 parameters:
-    locale: ru_RU
+    locale: ru
     mongo_session_collection: Session
     mongo_log_collection: Log
     mongo_applog_collection: ApplicationLog
@@ -86,6 +86,8 @@ fos_user:
     registration:
         confirmation:
             enabled:    true
+        form:
+            type: app_user_registration
 
 
 braincrafted_bootstrap:

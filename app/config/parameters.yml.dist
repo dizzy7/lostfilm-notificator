@@ -9,10 +9,15 @@ parameters:
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
+    email_debug_address: none@debug.dev
+    email_debug_disabled: true
+
     from_email:        notificator@lf.dizzy.name
     from_email_sender: Lostfilm notificator
 
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     ga_tracking: ~ #UA-xxxxxxxx-x
+
+
 

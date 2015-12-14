@@ -1,4 +1,9 @@
 services:
+    app.form.registration:
+        class: AppBundle\Form\Type\User\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+
     app.http_grabber:
         class: AppBundle\Service\HttpGrabber
         arguments: [@guzzle.client.lostfilm]

@@ -51,5 +51,5 @@ monolog:
             channels: applog
 
 swiftmailer:
-    delivery_address: 7dizzy7@gmail.com
-    disable_delivery: true
+    delivery_address: %email_debug_address%
+    disable_delivery: %email_debug_disabled%

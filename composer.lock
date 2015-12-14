@@ -1670,16 +1670,16 @@
         },
         {
             "name": "leafo/scssphp",
-            "version": "v0.6.0",
+            "version": "v0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "e7d382952c4dffc29ae832a7a37ddc0f37e66e68"
+                "reference": "fc8c73b7955b22b40792d716d42c8daa5b43a777"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/e7d382952c4dffc29ae832a7a37ddc0f37e66e68",
-                "reference": "e7d382952c4dffc29ae832a7a37ddc0f37e66e68",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/fc8c73b7955b22b40792d716d42c8daa5b43a777",
+                "reference": "fc8c73b7955b22b40792d716d42c8daa5b43a777",
                 "shasum": ""
             },
             "require": {
@@ -1719,7 +1719,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2015-12-04 05:49:08"
+            "time": "2015-12-13 08:03:38"
         },
         {
             "name": "monolog/monolog",
