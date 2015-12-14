@@ -30,7 +30,8 @@
         "leafo/scssphp": "0.6.*",
         "eightpoints/guzzle-bundle": "4.4.*",
         "doctrine/doctrine-fixtures-bundle": "2.3.*",
-        "sunra/php-simple-html-dom-parser": "1.5.*"
+        "sunra/php-simple-html-dom-parser": "1.5.*",
+        "shaygan/telegram-bot-api-bundle": "dev-master#6c3ae40de0e94674fc7cb64328b7ebe1f1d9a2e8"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

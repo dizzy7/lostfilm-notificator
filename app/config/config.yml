@@ -103,3 +103,6 @@ guzzle:
                 User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
             options:
                 timeout: 30
+
+shaygan_telegram_bot_api:
+    token: %telegram_token%

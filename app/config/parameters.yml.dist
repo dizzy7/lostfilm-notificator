@@ -19,5 +19,7 @@ parameters:
 
     ga_tracking: ~ #UA-xxxxxxxx-x
 
+    telegram_token: ~
+
 
 
