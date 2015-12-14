@@ -12,6 +12,7 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/")
+     * @Route("/", name="fos_user_profile_show")
      * @Security("has_role('ROLE_USER')")
      */
     public function indexAction(Request $request)

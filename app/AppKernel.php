@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new EightPoints\Bundle\GuzzleBundle\GuzzleBundle(),
+            new \Shaygan\TelegramBotApiBundle\ShayganTelegramBotApiBundle(),
 
             new AppBundle\AppBundle(),
         );

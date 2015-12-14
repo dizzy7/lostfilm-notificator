@@ -21,6 +21,11 @@ class User extends BaseUser
      */
     private $subscribedShows;
 
+    /**
+     * @MongoDB\Integer()
+     */
+    private $telegramId;
+
     public function __construct()
     {
         parent::__construct();
@@ -50,5 +55,15 @@ class User extends BaseUser
         $this->setUsername($email);
 
         return parent::setEmail($email);
+    }
+
+    public function getTelegramId()
+    {
+        return $this->telegramId;
+    }
+
+    public function setTelegramId($telegramId)
+    {
+        $this->telegramId = $telegramId;
     }
 }
