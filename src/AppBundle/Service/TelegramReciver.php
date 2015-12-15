@@ -23,9 +23,9 @@ class TelegramReciver implements UpdateReceiverInterface
 
     public function handleUpdate(Update $update)
     {
-        $cmd = $update->message->getChat();
+        $message = json_decode(json_encode($update->message), true);
 
-        switch ($cmd) {
+        switch ($message['text']) {
             case "/about":
             case "/about@{$this->config['bot_name']}":
                 $text = "I'm a samble Telegram Bot";
@@ -39,9 +39,9 @@ class TelegramReciver implements UpdateReceiverInterface
                 break;
         }
 
-        /** @var Chat $chat */
-        $chat = $update->message->getChat();
-        $this->botApi->sendMessage($chat->getId(), $text);
+        $this->logger->info('Сообщение из telegram', $message);
+
+        $this->botApi->sendMessage($message['chat']['id'], $text);
     }
 
 }
