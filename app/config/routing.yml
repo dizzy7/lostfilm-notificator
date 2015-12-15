@@ -17,8 +17,9 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
 
-shaygan_telegram_bot_api:
-    resource: @ShayganTelegramBotApiBundle/Resources/config/routing.yml
+shaygan_telegram_bot_api_update:
+    path:     /telegram-bot/update/{secret}
+    defaults: { _controller: ShayganTelegramBotApiBundle:Default:update, secret: null }
 
 app:
     resource: "@AppBundle/Controller/"
