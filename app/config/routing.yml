@@ -17,6 +17,9 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
 
+shaygan_telegram_bot_api:
+    resource: @ShayganTelegramBotApiBundle/Resources/config/routing.yml
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation

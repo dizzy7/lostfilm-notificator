@@ -20,6 +20,8 @@ parameters:
     ga_tracking: ~ #UA-xxxxxxxx-x
 
     telegram_token: ~
+    domain: example.com
+    telegram_webhook_prefix: ThisTokenIsNotSoSecretChangeIt
 
 
 

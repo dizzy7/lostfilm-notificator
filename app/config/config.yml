@@ -106,3 +106,7 @@ guzzle:
 
 shaygan_telegram_bot_api:
     token: %telegram_token%
+    webhook:
+      domain: %domain%
+      path_prefix: %telegram_webhook_prefix%
+      update_receiver: app.telegram_reciver

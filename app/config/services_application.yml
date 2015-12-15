@@ -24,3 +24,10 @@ services:
             - @doctrine.odm.mongodb.document_manager
             - %from_email%
             - %from_email_sender%
+
+    app.telegram_reciver:
+        class: AppBundle\Service\TelegramReciver
+        arguments:
+            - %shaygan_telegram_bot_api.config%
+            - @shaygan.telegram_bot_api
+            - @monolog.logger.applog
