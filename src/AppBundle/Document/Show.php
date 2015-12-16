@@ -171,7 +171,7 @@ class Show
         });
 
         if ($episodes->count() > 0) {
-            return $episodes->get(0);
+            return $episodes->first();
         }
 
         return;

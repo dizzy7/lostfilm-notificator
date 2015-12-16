@@ -31,6 +31,7 @@ class Parser
         $lastUpdate = $optionRepository->getLastUpdateDate();
         if ($lastRssBuildDate > $lastUpdate) {
             $this->parseEpisodes($rss);
+            $optionRepository->setLastUpdateDate($lastRssBuildDate);
         }
 
         return 0;

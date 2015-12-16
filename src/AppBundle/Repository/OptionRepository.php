@@ -17,4 +17,13 @@ class OptionRepository extends DocumentRepository
 
         return $option->getDateValue();
     }
+
+    public function setLastUpdateDate(\DateTime $date)
+    {
+        /** @var Option $option */
+        $option = $this->findOneBy(['id' => Option::LAST_UPDATE]);
+        $option->setDateValue($date);
+
+        $this->getDocumentManager()->flush($option);
+    }
 }
