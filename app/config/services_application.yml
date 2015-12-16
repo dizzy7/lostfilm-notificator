@@ -31,3 +31,4 @@ services:
             - %shaygan_telegram_bot_api.config%
             - @shaygan.telegram_bot_api
             - @monolog.logger.applog
+            - @doctrine.odm.mongodb.document_manager

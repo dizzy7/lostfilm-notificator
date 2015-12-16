@@ -26,6 +26,11 @@ class User extends BaseUser
      */
     private $telegramId;
 
+    /**
+     * @MongoDB\Integer()
+     */
+    private $telegramConfirmationCode;
+
     public function __construct()
     {
         parent::__construct();
@@ -65,5 +70,15 @@ class User extends BaseUser
     public function setTelegramId($telegramId)
     {
         $this->telegramId = $telegramId;
+    }
+
+    public function getTelegramConfirmationCode()
+    {
+        return $this->telegramConfirmationCode;
+    }
+
+    public function setTelegramConfirmationCode($telegramConfirmationCode)
+    {
+        $this->telegramConfirmationCode = $telegramConfirmationCode;
     }
 }

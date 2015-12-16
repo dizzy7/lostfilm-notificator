@@ -1,0 +1,66 @@
+{% extends '::layout.html.twig' %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block body %}
+    <form>
+        <div class="row">
+            <div class="col-sm-9">
+                <label>Уведомления приходят на:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" id="q160" name="quality[25]" checked="checked" value="5"/>Email
+                    </label>
+                    <label class="btn btn-default" id="telegram" {% if not app.user.telegramId %}data-toggle="modal"
+                           data-target="#telegramModal"{% endif %}>
+                        <input type="radio" id="q156" name="quality[25]" value="1"/>Telegram
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="telegramModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Для получения уведомлений в телеграм необходимо выполнить
+                        следующие действия:</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Начать чат с пользователем <strong>shows-notificator</strong></li>
+                        <li>Отправить в чат текст <strong id="telegramCode">...</strong></li>
+                    </ul>
+                    <br>
+                    Ожидаем подтверждения...
+                    <div class="spinner" style="margin-left: 20px; position: relative; top: 15px;"></div>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block customjs %}
+    {% if not app.user.telegramId %}
+        <script type="text/javascript">
+            $(function () {
+                $("#telegram").on('click', function () {
+                    $.get(Routing.generate('app_settings_generatetelegramcode'), function (data) {
+                        $("#telegramCode").text(data.code);
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}
