@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\User;
+use AppBundle\Form\Type\User\SettingsType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -16,9 +18,24 @@ class SettingsController extends Controller
     /**
      * @Route("/settings")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        return $this->render('settings/index.html.twig', []);
+        $user = $this->getUser();
+
+        $form = $this->createForm(new SettingsType(), $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dm = $this->get('doctrine.odm.mongodb.document_manager');
+            $dm->flush($user);
+        }
+
+        return $this->render(
+            'settings/index.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -36,5 +53,16 @@ class SettingsController extends Controller
         $dm->flush();
 
         return new JsonResponse(['code' => $telegramCode]);
+    }
+
+    /**
+     * @Route("/settings/checkTelegramRegistration", options={"expose"=true})
+     */
+    public function checkTelegramRegistration()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return new JsonResponse(['success' => (boolean) $user->getTelegramId()]);
     }
 }

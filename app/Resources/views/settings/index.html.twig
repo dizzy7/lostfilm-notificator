@@ -3,7 +3,7 @@
 {% block title %}Настройки{% endblock %}
 
 {% block body %}
-    <form>
+    <form method="post">
         <div class="row">
             <div class="col-sm-9">
                 <label>Уведомления приходят на:</label>
@@ -12,14 +12,23 @@
         <div class="row">
             <div class="col-sm-9">
                 <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default active">
-                        <input type="radio" id="q160" name="quality[25]" checked="checked" value="5"/>Email
-                    </label>
-                    <label class="btn btn-default" id="telegram" {% if not app.user.telegramId %}data-toggle="modal"
-                           data-target="#telegramModal"{% endif %}>
-                        <input type="radio" id="q156" name="quality[25]" value="1"/>Telegram
-                    </label>
+                    {% for choice in form.notificateVia %}
+                        <label
+                                class="btn btn-default{% if choice.vars.checked %} active{% endif %}"
+                                {% if choice.vars.value == constant('NOTIFICATION_VIA_TELEGRAM', app.user)%}id="telegram"{% endif %}
+                        >
+                            {{ form_widget(choice) }}
+                            {{ choice.vars.label }}
+                            {#<input type="radio" id="q160" name="quality[25]" checked="checked" value="5"/>Email#}
+                        </label>
+                    {% endfor %}
                 </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-9">
+                <button type="submit" class="btn btn-success">Сохранить</button>
             </div>
         </div>
     </form>
@@ -40,8 +49,14 @@
                         <li>Отправить в чат текст <strong id="telegramCode">...</strong></li>
                     </ul>
                     <br>
-                    Ожидаем подтверждения...
-                    <div class="spinner" style="margin-left: 20px; position: relative; top: 15px;"></div>
+                    <div id="waitForConfirmation">
+                        Ожидаем подтверждения...
+                        <div id="spinner" class="spinner"
+                             style="margin-left: 20px; position: relative; top: 15px;"></div>
+                    </div>
+                    <div id="telegramSuccess">
+                        <strong>Код успешно подтвержден, теперь вы можете получать уведомления в телеграм!</strong>
+                    </div>
                     <br>
                     <br>
                 </div>
@@ -55,10 +70,37 @@
     {% if not app.user.telegramId %}
         <script type="text/javascript">
             $(function () {
+                var checkingActive = false;
+                var success = false;
                 $("#telegram").on('click', function () {
                     $.get(Routing.generate('app_settings_generatetelegramcode'), function (data) {
                         $("#telegramCode").text(data.code);
+                        $("#telegramModal").modal('show');
+                        checkingActive = true;
+                        checkSuccess();
                     });
+
+                    var checkSuccess = function () {
+                        if (checkingActive) {
+                            $.get(Routing.generate('app_settings_checktelegramregistration'), function (data) {
+                                if (data.success) {
+                                    $("#waitForConfirmation").hide();
+                                    $("#telegramSuccess").show();
+                                    $("#telegram").off('click');
+                                    success = true;
+                                } else {
+                                    setTimeout(checkSuccess, 1000);
+                                }
+                            })
+                        }
+                    };
+                });
+
+                $("#telegramModal").on('hide.bs.modal', function() {
+                    checkingActive = false;
+                    if (success === false) {
+                        $("#app_user_settings_notificateVia_0").click();
+                    }
                 });
             });
         </script>

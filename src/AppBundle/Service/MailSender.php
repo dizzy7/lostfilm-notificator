@@ -69,7 +69,7 @@ class MailSender
             $message->setCharset('utf-8');
             $message->addFrom($this->fromEmail, $this->fromEmailSender);
             $message->addTo($user->getEmail());
-            $message->setSubject('Новая серия сериала ' . $show->getTitle());
+            $message->setSubject('Новая серия сериала '.$show->getTitle());
             $message->setContentType('text/html');
 
             $this->swiftMailer->send($message);

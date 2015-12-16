@@ -11,6 +11,9 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class User extends BaseUser
 {
+    const NOTIFICATION_VIA_EMAIL = 1;
+    const NOTIFICATION_VIA_TELEGRAM = 2;
+
     /**
      * @MongoDB\Id(strategy="uuid")
      */
@@ -20,6 +23,11 @@ class User extends BaseUser
      * @MongoDB\ReferenceMany(targetDocument="AppBundle\Document\Show", inversedBy="subscribers")
      */
     private $subscribedShows;
+
+    /**
+     * @MongoDB\Integer(value="1")
+     */
+    private $notificateVia = 1;
 
     /**
      * @MongoDB\Integer()
@@ -80,5 +88,15 @@ class User extends BaseUser
     public function setTelegramConfirmationCode($telegramConfirmationCode)
     {
         $this->telegramConfirmationCode = $telegramConfirmationCode;
+    }
+
+    public function getNotificateVia()
+    {
+        return $this->notificateVia;
+    }
+
+    public function setNotificateVia($notificateVia)
+    {
+        $this->notificateVia = $notificateVia;
     }
 }

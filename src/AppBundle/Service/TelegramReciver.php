@@ -33,10 +33,11 @@ class TelegramReciver implements UpdateReceiverInterface
 
         if (is_numeric($messageText)) {
             $userRepository = $this->dm->getRepository('AppBundle:User');
-            $user = $userRepository->findOneBy(['telegramConfirmationCode' => (int)$messageText]);
+            $user = $userRepository->findOneBy(['telegramConfirmationCode' => (int) $messageText]);
 
             if ($user) {
                 $user->setTelegramId($message['chat']['id']);
+                $user->setTelegramConfirmationCode(null);
                 $this->dm->flush($user);
                 $this->botApi->sendMessage($message['chat']['id'], 'Код принят, ожидайте подтверждения на сайте');
 
@@ -52,10 +53,10 @@ class TelegramReciver implements UpdateReceiverInterface
         }
 
         switch ($message['text']) {
-            case "/about":
+            case '/about':
                 $text = "I'm Telegram Bot";
                 break;
-            case "/help":
+            case '/help':
             default :
                 $text = "Command List:\n";
                 $text .= "/about - About this bot\n";
@@ -65,5 +66,4 @@ class TelegramReciver implements UpdateReceiverInterface
 
         $this->botApi->sendMessage($message['chat']['id'], $text);
     }
-
 }
