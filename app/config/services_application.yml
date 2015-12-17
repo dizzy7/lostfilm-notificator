@@ -15,15 +15,28 @@ services:
             - @monolog.logger.applog
             - @simple_dom_parser
 
-    app.mail_sender:
-        class: AppBundle\Service\MailSender
+    app.sender:
+        class: AppBundle\Service\Sender
         arguments:
-            - @swiftmailer.mailer
             - @templating
-            - @monolog.logger.applog
             - @doctrine.odm.mongodb.document_manager
+            - @monolog.logger.applog
+            - @app.sender.mail
+            - @app.sender.telegram
+
+    app.sender.mail:
+        class: AppBundle\Service\Sender\MailSender
+        arguments:
+            - @mailer
+            - @monolog.logger.applog
             - %from_email%
             - %from_email_sender%
+
+    app.sender.telegram:
+        class: AppBundle\Service\Sender\TelegramSender
+        arguments:
+            - @shaygan.telegram_bot_api
+            - @monolog.logger.applog
 
     app.telegram_reciver:
         class: AppBundle\Service\TelegramReciver

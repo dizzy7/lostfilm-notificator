@@ -1,0 +1,9 @@
+Вышла новая серия сериала *{{ show.title }}* на сайте lostfilm.tv:
+*{{ episode.title }}* (Сезон {{ episode.seasonNumber }}, эпизод {{ episode.episodeNumber }})
+
+{% if episode.links | length > 0 %}
+Ссылки для скачивания:
+{% for link in episode.links %}
+[{{ link.resolution }}]({{ link.url }}) 
+{% endfor %}
+{% endif %}

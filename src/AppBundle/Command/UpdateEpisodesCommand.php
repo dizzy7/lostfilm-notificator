@@ -32,7 +32,7 @@ class UpdateEpisodesCommand extends ContainerAwareCommand
         $parser = $this->getContainer()->get('app.parser');
         $parser->parseRss($rss);
 
-        $sender = $this->getContainer()->get('app.mail_sender');
+        $sender = $this->getContainer()->get('app.sender');
         $sender->sendNewEpisodeNotifications();
 
         return 0;

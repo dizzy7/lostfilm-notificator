@@ -28,6 +28,7 @@ class SettingsController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $dm = $this->get('doctrine.odm.mongodb.document_manager');
             $dm->flush($user);
+            $this->redirect($this->generateUrl('app_settings_index'));
         }
 
         return $this->render(

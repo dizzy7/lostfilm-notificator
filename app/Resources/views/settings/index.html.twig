@@ -4,6 +4,7 @@
 
 {% block body %}
     <form method="post">
+        {{ form_errors(form) }}
         <div class="row">
             <div class="col-sm-9">
                 <label>Уведомления приходят на:</label>
@@ -19,7 +20,6 @@
                         >
                             {{ form_widget(choice) }}
                             {{ choice.vars.label }}
-                            {#<input type="radio" id="q160" name="quality[25]" checked="checked" value="5"/>Email#}
                         </label>
                     {% endfor %}
                 </div>
@@ -31,6 +31,7 @@
                 <button type="submit" class="btn btn-success">Сохранить</button>
             </div>
         </div>
+        {{ form_rest(form) }}
     </form>
 
     <!-- Modal -->
