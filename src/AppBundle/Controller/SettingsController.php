@@ -46,11 +46,20 @@ class SettingsController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
-        $telegramCode = mt_rand(100000, 999999);
+        $telegramCode = mt_rand(1000000, 9999999);
         $user->setTelegramConfirmationCode($telegramCode);
 
         $dm = $this->get('doctrine.odm.mongodb.document_manager');
-        $dm->flush();
+        while (true) {
+            try {
+                $dm->flush();
+
+                break;
+            } catch (\MongoDuplicateKeyException $e) {
+                $telegramCode = mt_rand(1000000, 9999999);
+                $user->setTelegramConfirmationCode($telegramCode);
+            }
+        }
 
         return new JsonResponse(['code' => $telegramCode]);
     }

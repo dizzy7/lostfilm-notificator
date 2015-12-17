@@ -36,6 +36,7 @@ class User extends BaseUser
 
     /**
      * @MongoDB\Integer()
+     * @MongoDB\UniqueIndex(sparse=true)
      */
     private $telegramConfirmationCode;
 
