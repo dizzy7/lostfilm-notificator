@@ -2,12 +2,8 @@
 
 namespace AppBundle\Service\Sender;
 
-use AppBundle\Document\Episode;
-use AppBundle\Document\Show;
 use AppBundle\Document\User;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Twig\TwigEngine;
 
 class MailSender implements SenderInterface
 {
@@ -41,10 +37,10 @@ class MailSender implements SenderInterface
 
         $this->swiftMailer->send($message);
         $this->logger->info(
-            'Отправлено письмо пользователю ' . $user->getEmail(),
+            'Отправлено письмо пользователю '.$user->getEmail(),
             [
                 'text' => $text,
-                'subject' => $subject
+                'subject' => $subject,
             ]
         );
     }

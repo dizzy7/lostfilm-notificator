@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Service\Sender;
-
 
 use AppBundle\Document\User;
 use Psr\Log\LoggerInterface;

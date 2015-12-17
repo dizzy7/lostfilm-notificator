@@ -3,6 +3,7 @@
 namespace AppBundle\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Document\User as BaseUser;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
@@ -47,7 +48,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return Show[]
+     * @return Show[]|Collection
      */
     public function getSubscribedShows()
     {

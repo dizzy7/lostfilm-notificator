@@ -65,13 +65,12 @@ class Sender
                 } else {
                     $senderService->sendNotification($user, $message['text'], $subject);
                 }
-
             } catch (\LogicException $e) {
                 $this->logger->critical(
                     'Неизвестный тип оповещения',
                     [
                         'user' => $user->getId(),
-                        'email' => $user->getEmail()
+                        'email' => $user->getEmail(),
                     ]
                 );
             }
