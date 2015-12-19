@@ -35,8 +35,14 @@ class TelegramReciver implements UpdateReceiverInterface
     public function handleUpdate(Update $update)
     {
         $message = json_decode(json_encode($update->message), true);
-        $this->logger->info('Сообщение из telegram', $message);
         $this->findUser($message['chat']['id']);
+        $this->logger->info(
+            'Сообщение из telegram',
+            $message,
+            [
+                'user' => $this->user ? $this->user->getEmail() : 'new'
+            ]
+        );
 
         $messageText = trim($message['text']);
 
@@ -56,6 +62,15 @@ class TelegramReciver implements UpdateReceiverInterface
             $this->botApi->sendMessage(
                 $message['chat']['id'],
                 'Код не найден! Попробуйте еще раз или обратитесь к администратору'
+            );
+
+            return;
+        }
+
+        if ($this->user === null) {
+            $this->botApi->sendMessage(
+                $message['chat']['id'],
+                'Для использования бота необходимо зарегистрироваться на сайте http://lf.dizzy.name'
             );
 
             return;

@@ -20,6 +20,13 @@ class TelegramSender implements SenderInterface
     public function sendNotification(User $user, $text, $subject)
     {
         $this->botApi->sendMessage($user->getTelegramId(), $text);
+
+        $this->logger->info(
+            'Отправлено сообщение telegram пользователю '.$user->getEmail(),
+            [
+                'text' => $text
+            ]
+        );
     }
 
     public function isHtmlSupported()

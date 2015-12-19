@@ -42,7 +42,7 @@ class SettingsController extends Controller
     /**
      * @Route("/settings/getTelegramCode", options={"expose"=true})
      */
-    public function generateTelegramCode()
+    public function generateTelegramCodeAction()
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -68,7 +68,7 @@ class SettingsController extends Controller
     /**
      * @Route("/settings/checkTelegramRegistration", options={"expose"=true})
      */
-    public function checkTelegramRegistration()
+    public function checkTelegramRegistrationAction()
     {
         /** @var User $user */
         $user = $this->getUser();
