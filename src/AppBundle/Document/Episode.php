@@ -43,6 +43,7 @@ class Episode
 
     /**
      * @MongoDB\Boolean()
+     * @MongoDB\Index()
      */
     private $notificationSended = false;
 
