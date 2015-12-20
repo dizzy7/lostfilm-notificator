@@ -65,11 +65,18 @@ abstract class AbstractShow
     }
 
     /**
+     * @MongoDB\PrePersist()
+     */
+    public function updateCreatedAt(){
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
      * @MongoDB\PreUpdate()
      */
-    public function updatedates()
+    public function updateUpdatedAt()
     {
-        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId()
