@@ -43,7 +43,7 @@ namespace :deploy do
       symfony.doctrine.mongodb.schema.update
   end
 
-  task :mongo_schema_update do
+  task :brancrafed_bootstrap_install do
       symfony.braincrafted.bootstrap.install
   end
 end
