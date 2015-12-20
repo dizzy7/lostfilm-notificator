@@ -35,6 +35,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{{ path('app_default_feedback') }}"><strong>Обратная связь</strong></a>
+                    </li>
                     {% if is_granted('ROLE_USER') %}
                     <li>
                         <a href="{{ path('app_settings_index') }}">Настройки</a>

@@ -4,13 +4,14 @@ namespace AppBundle\Controller;
 
 use AppBundle\Document\AbstractShow;
 use AppBundle\Document\User;
-use AppBundle\Form\Type\SubscriptionType;
+use AppBundle\Form\Type\FeedbackType;
 use AppBundle\Repository\AbstractShowRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -64,5 +65,40 @@ class DefaultController extends Controller
         $dm->flush();
 
         return new JsonResponse(['success' => true]);
+    }
+
+    /**
+     * @Route("/feedback")
+     */
+    public function feedbackAction(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $form = $this->createForm(new FeedbackType($user));
+        $form->handleRequest($request);
+
+        $sended = false;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $mailer = $this->get('mailer');
+            /** @var \Swift_Message $message */
+            $message = $mailer->createMessage();
+            $message->setSubject('Обратная связь с сайта lf.dizzy.name');
+            $message->setTo($this->getParameter('feedback_email'));
+            $message->setFrom($this->getParameter('from_email'));
+            $body = 'Пользователь: ' . ($user ? $user->getEmail() : $form->get('email')->getData()) . "\n";
+            $body .= $form->get('text')->getData();
+            $message->setBody($body);
+
+            $mailer->send($message);
+            $sended = true;
+        }
+
+        return $this->render(
+            'default/feedback.html.twig',
+            [
+                'form' => $form->createView(),
+                'sended' => $sended
+            ]
+        );
     }
 }

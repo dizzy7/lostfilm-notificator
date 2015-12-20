@@ -1,0 +1,18 @@
+{% extends '::layout.html.twig' %}
+
+{% block title %}Notificator - feedback{% endblock %}
+
+{% block body %}
+    {% if sended %}
+        <h2>Сообщение отправлено</h2>
+    {% else %}
+        <form method="post" action="{{ path('app_default_feedback') }}">
+            {% if not app.user %}
+                {{ form_row(form.email) }}
+            {% endif %}
+            {{ form_row(form.text) }}
+            <button type="submit" class="btn btn-success">Отправить</button>
+            {{ form_rest(form) }}
+        </form>
+    {% endif %}
+{% endblock %}
