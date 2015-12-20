@@ -19,7 +19,7 @@
                 <tbody>
                 {% for show in shows if show is instanceof('AppBundle\\Document\\LostfilmShow') %}
                     <tr>
-                        <td>{{ show.title }} <span class="glyphicon glyphicon-heart"></span></td>
+                        <td>{{ show.title }}</td>
                         <td class="td-checkbox"><input type="checkbox" data-id="{{ show.id }}" value="1" data-off-label="false" data-on-label="false" data-off-icon-class="glyphicon glyphicon-remove" data-on-icon-class="glyphicon glyphicon-ok"
                                    {% if app.user.isSubscribed(show) %}checked{% endif %}></td>
                         <td class="status"><img src="/images/loading_spinner.gif"></td>
