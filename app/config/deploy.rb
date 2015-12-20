@@ -50,3 +50,4 @@ end
 
 before "deploy:create_symlink", "deploy:mongo_session_index"
 before "deploy:create_symlink", "deploy:mongo_schema_update"
+before "deploy:create_symlink", "deploy:brancrafed_bootstrap_install"
