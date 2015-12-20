@@ -43,11 +43,11 @@ namespace :deploy do
       symfony.doctrine.mongodb.schema.update
   end
 
-  task :brancrafed_bootstrap_install do
-      symfony.braincrafted.bootstrap.install
-  end
+  #task :brancrafed_bootstrap_install do
+      #symfony.braincrafted.bootstrap.install
+  #end
 end
 
 before "deploy:create_symlink", "deploy:mongo_session_index"
 before "deploy:create_symlink", "deploy:mongo_schema_update"
-before "deploy:create_symlink", "deploy:brancrafed_bootstrap_install"
+#before "deploy:create_symlink", "deploy:brancrafed_bootstrap_install"
