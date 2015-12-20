@@ -3,11 +3,6 @@
 {% block title %}Добро пожаловать в Lostfilm notificator{% endblock %}
 
 {% block body %}
-    {{ form_start(form, {'attr': {'id': 'subscriptionForm'}}) }}
-    <div class="container submit-button-top">
-        <button type="submit" class="btn btn-default btn-success">Сохранить</button>
-    </div>
-
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
             <a href="#lostfilm" aria-controls="lostfilm" role="tab" data-toggle="tab">Lostfilm</a>
@@ -22,10 +17,12 @@
         <div role="tabpanel" class="tab-pane active" id="lostfilm">
             <table class="table table-striped">
                 <tbody>
-                {% for show in form.subscribedShows if shows[show.vars.value] is instanceof('AppBundle\\Document\\LostfilmShow') %}
+                {% for show in shows if show is instanceof('AppBundle\\Document\\LostfilmShow') %}
                     <tr>
-                        <td>{{ form_label(show) }}</td>
-                        <td>{{ form_widget(show) }}</td>
+                        <td>{{ show.title }} <span class="glyphicon glyphicon-heart"></span></td>
+                        <td class="td-checkbox"><input type="checkbox" data-id="{{ show.id }}" value="1" data-off-label="false" data-on-label="false" data-off-icon-class="glyphicon glyphicon-remove" data-on-icon-class="glyphicon glyphicon-ok"
+                                   {% if app.user.isSubscribed(show) %}checked{% endif %}></td>
+                        <td class="status"><img src="/images/loading_spinner.gif"></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -34,27 +31,41 @@
         <div role="tabpanel" class="tab-pane" id="animedia">
             <table class="table table-striped">
                 <tbody>
-                {% for show in form.subscribedShows if shows[show.vars.value] is instanceof('AppBundle\\Document\\AnimediaShow') %}
+                {% for show in shows if show is instanceof('AppBundle\\Document\\AnimediaShow') %}
                     <tr>
-                        <td>{{ form_label(show) }}</td>
-                        <td>{{ form_widget(show) }}</td>
+                        <td>{{ show.title }}</td>
+                        <td class="td-checkbox"><input type="checkbox" data-id="{{ show.id }}" value="1" data-off-label="false" data-on-label="false" data-off-icon-class="glyphicon glyphicon-remove" data-on-icon-class="glyphicon glyphicon-ok"
+                                   {% if app.user.isSubscribed(show) %}checked{% endif %}></td>
+                        <td class="status"><img src="/images/loading_spinner.gif"></td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-
-    <div class="container submit-button-top">
-        <button type="submit" class="btn btn-default btn-success">Сохранить</button>
-    </div>
-    {{ form_end(form) }}
 {% endblock %}
 
 {% block customjs %}
     <script type="text/javascript">
-        $(function() {
-            $(':checkbox').checkboxpicker();
+        $(function () {
+            var checkboxes = $('.tab-content :checkbox');
+            checkboxes.checkboxpicker();
+            checkboxes.change(function (e) {
+                var $element = $(this);
+                var id = $element.data('id');
+                $element.parent().next().find('img').css('visibility', 'visible');
+                var isChecked = $element.is(':checked');
+                $.post(
+                        Routing.generate('app_default_togglesubscribe', {'id': id, 'action': isChecked ? 1 : 0}),
+                        function (data) {
+                            if (data.success) {
+                                $element.parent().next().find('img').css('visibility', 'hidden');
+                            } else {
+                                alert('Ошибка при сохранении');
+                            }
+                        }
+                )
+            });
         });
     </script>
 {% endblock %}

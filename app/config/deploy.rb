@@ -42,6 +42,10 @@ namespace :deploy do
   task :mongo_schema_update do
       symfony.doctrine.mongodb.schema.update
   end
+
+  task :mongo_schema_update do
+      symfony.braincrafted.bootstrap.install
+  end
 end
 
 before "deploy:create_symlink", "deploy:mongo_session_index"

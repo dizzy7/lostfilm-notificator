@@ -18,3 +18,19 @@
 #telegramSuccess {
   display: none;
 }
+
+table {
+  td.td-checkbox {
+    width: 100px;
+  }
+  td.status {
+    vertical-align: middle;
+    text-align: left;
+    width: 40px;
+    img {
+      visibility: hidden;
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

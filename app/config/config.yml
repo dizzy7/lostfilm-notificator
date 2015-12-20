@@ -96,7 +96,7 @@ fos_user:
 braincrafted_bootstrap:
     less_filter: scssphp
     output_dir: bootstrap/
-    fonts_dir: web/bootstrap/fonts
+    fonts_dir: %kernel.root_dir%/../web/bootstrap/fonts/bootstrap
 
 guzzle:
     clients:

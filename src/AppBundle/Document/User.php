@@ -101,4 +101,9 @@ class User extends BaseUser
     {
         $this->notificateVia = $notificateVia;
     }
+
+    public function isSubscribed(AbstractShow $show)
+    {
+        return $this->getSubscribedShows()->contains($show);
+    }
 }

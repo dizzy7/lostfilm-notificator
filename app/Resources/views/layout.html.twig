@@ -10,7 +10,7 @@
         {% stylesheets '../app/Resources/public/scss/*' filter='cssrewrite' output='css/compiled/app1.css' %}
             <link rel="stylesheet" href="{{ asset_url }}"/>
         {% endstylesheets %}
-        {% stylesheets '../app/Resources/public/css/*'  output='css/compiled/app2.css' %}
+        {% stylesheets '../app/Resources/public/css/*' filter='cssrewrite' output='css/compiled/app2.css' %}
             <link rel="stylesheet" href="{{ asset_url }}"/>
         {% endstylesheets %}
     {% endblock %}
