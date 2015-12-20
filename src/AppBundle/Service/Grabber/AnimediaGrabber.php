@@ -142,20 +142,24 @@ class AnimediaGrabber implements GrabberInterface
             $show = $animediaShowRepository->findOneBy(['title' => $showTitle]);
             if ($show) {
                 $url = 'http://online.animedia.tv' . $node->getAttribute('href');
-                $episode = new Episode();
                 $matches = [];
                 if (preg_match('#Серия\s(\d+)\sиз#u', $node->parentNode->nodeValue, $matches)) {
-                    $episode->setEpisodeNumber((int) $matches[1]);
+                    $episode = $show->getEpisodeByNumbers(null, (int)$matches[1]);
+                    if (!$episode) {
+                        $episode = new Episode();
+                        $episode->setEpisodeNumber((int)$matches[1]);
+
+                        $link = new Link();
+                        $link->setUrl($url);
+                        $link->setResolution('online');
+                        $episode->addLink($link);
+
+                        $show->addEpisode($episode);
+
+                        $this->logger->info('Новая серия сериала на animedia:' . $showTitle);
+                    }
+
                 }
-
-                $link = new Link();
-                $link->setUrl($url);
-                $link->setResolution('online');
-                $episode->addLink($link);
-
-                $show->addEpisode($episode);
-
-                $this->logger->info('Новая серия сериала на animedia:' . $showTitle);
             } else {
                 $this->logger->error('Сериал на animedia не найден:' . $showTitle);
             }
