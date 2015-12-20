@@ -2,13 +2,13 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Document\Show;
+use AppBundle\Document\AbstractShow;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
-class ShowRepository extends DocumentRepository
+class AbstractShowRepository extends DocumentRepository
 {
     /**
-     * @return Show[]
+     * @return AbstractShow[]
      */
     public function findWithNewEpisodes()
     {
@@ -19,7 +19,7 @@ class ShowRepository extends DocumentRepository
     }
 
     /**
-     * @return Show[]
+     * @return AbstractShow[]
      */
     public function findActiveShows()
     {
@@ -29,7 +29,8 @@ class ShowRepository extends DocumentRepository
     public function findActiveShowsQueryBuilder()
     {
         $qb = $this->createQueryBuilder();
-        $qb->field('isClosed')->equals(false);
+        $qb->field('closed')->notEqual(true);
+        $qb->sort('title', 'asc');
 
         return $qb;
     }

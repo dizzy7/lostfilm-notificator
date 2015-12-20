@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Service\Grabber\GrabberInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,20 +18,13 @@ class UpdateEpisodesCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $logger = $this->getContainer()->get('monolog.logger.applog');
+        $grabberServices = $this->getContainer()->getParameter('grabbers');
 
-        $grabber = $this->getContainer()->get('app.http_grabber');
-        try {
-            $rssFeed = $grabber->getPage('/rssdd.xml');
-        } catch (\Exception $e) {
-            $logger->error('Ошибка загрузки rss:'.$e->getMessage());
-
-            return 1;
+        foreach ($grabberServices as $grabberService) {
+            /** @var GrabberInterface $grabber */
+            $grabber = $this->getContainer()->get($grabberService);
+            $grabber->updateEpisodes();
         }
-        $rss = simplexml_load_string($rssFeed);
-
-        $parser = $this->getContainer()->get('app.parser');
-        $parser->parseRss($rss);
 
         $sender = $this->getContainer()->get('app.sender');
         $sender->sendNewEpisodeNotifications();

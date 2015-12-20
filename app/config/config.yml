@@ -9,6 +9,9 @@ parameters:
     mongo_session_collection: Session
     mongo_log_collection: Log
     mongo_applog_collection: ApplicationLog
+    grabbers:
+        - app.grabber.lostfilm
+        - app.grabber.animedia
 
 framework:
     #esi:             ~
@@ -99,6 +102,12 @@ guzzle:
     clients:
         lostfilm:
             base_url: "http://www.lostfilm.tv"
+            headers:
+                User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+            options:
+                timeout: 30
+        animedia:
+            base_url: "http://online.animedia.tv"
             headers:
                 User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
             options:

@@ -21,7 +21,7 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="AppBundle\Document\Show", inversedBy="subscribers")
+     * @MongoDB\ReferenceMany(targetDocument="AppBundle\Document\AbstractShow", inversedBy="subscribers")
      */
     private $subscribedShows;
 
@@ -48,19 +48,19 @@ class User extends BaseUser
     }
 
     /**
-     * @return Show[]|Collection
+     * @return AbstractShow[]|Collection
      */
     public function getSubscribedShows()
     {
         return $this->subscribedShows;
     }
 
-    public function addSubscribedShow(Show $show)
+    public function addSubscribedShow(AbstractShow $show)
     {
         return $this->subscribedShows->add($show);
     }
 
-    public function removeSubscribedShow(Show $show)
+    public function removeSubscribedShow(AbstractShow $show)
     {
         return $this->subscribedShows->removeElement($show);
     }

@@ -16,3 +16,9 @@ services:
 
     simple_dom_parser:
         class: Sunra\PhpSimple\HtmlDomParser
+
+    app.twig_extension:
+        class: AppBundle\Twig\Extension
+        public: false
+        tags:
+            - { name: twig.extension }

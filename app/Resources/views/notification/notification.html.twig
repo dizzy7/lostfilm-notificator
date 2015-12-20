@@ -1,8 +1,11 @@
-Вышла новая серия сериала <b>{{ show.title }}</b> на сайте lostfilm.tv:
-<b>{{ episode.title }}</b> (Сезон {{ episode.seasonNumber }}, эпизод {{ episode.episodeNumber }})
+Вышла новая серия сериала <b>{{ show.title }}</b> на сайте {{ show.siteUrl }}:
+{% if episode.title %}<b>{{ episode.title }}</b>{% endif %}
+{%- if episode.seasonNumber %}(Сезон {{ episode.seasonNumber }}, эпизод {{ episode.episodeNumber }})
+{%- else %}Серия {{ episode.episodeNumber }}
+{%- endif %}
 
 {% if episode.links | length > 0 %}
-    Ссылки для скачивания:
+    Ссылки для скачивания/просмотра:
     {% for link in episode.links %}
         <a href="{{ link.url }}">{{ link.resolution }}</a>&nbsp;&nbsp;
     {% endfor %}

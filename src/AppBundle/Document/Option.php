@@ -9,7 +9,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class Option
 {
-    const LAST_UPDATE = '18adfb3a-9eb5-11e5-96d1-6b48da20aa84';
+    const LOSTFILM_LAST_UPDATE = '18adfb3a-9eb5-11e5-96d1-6b48da20aa84';
 
     /**
      * @MongoDB\Id(strategy="uuid")

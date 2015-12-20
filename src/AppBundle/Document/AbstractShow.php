@@ -7,10 +7,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document(repositoryClass="AppBundle\Repository\ShowRepository")
+ * @MongoDB\Document(repositoryClass="AppBundle\Repository\AbstractShowRepository", collection="Show")
  * @MongoDB\HasLifecycleCallbacks()
+ * @MongoDB\InheritanceType("SINGLE_COLLECTION")
+ * @MongoDB\DiscriminatorField("type")
+ * @MongoDB\DiscriminatorMap({"lostfilm"="LostfilmShow", "animedia"="AnimediaShow"})
+ * @MongoDB\DefaultDiscriminatorValue("lostfilm")
+ * @MongoDB\MappedSuperclass()
  */
-class Show
+abstract class AbstractShow
 {
     /**
      * @MongoDB\Id(strategy="uuid")
@@ -29,6 +34,7 @@ class Show
 
     /**
      * @MongoDB\Boolean()
+     * @MongoDB\Index()
      */
     private $closed = false;
 
@@ -201,4 +207,6 @@ class Show
     {
         $this->closed = $closed;
     }
+
+    abstract public function getSiteUrl();
 }

@@ -2,9 +2,9 @@
 
 namespace AppBundle\Form\Type;
 
-use AppBundle\Document\Show;
+use AppBundle\Document\AbstractShow;
 use AppBundle\Document\User;
-use AppBundle\Repository\ShowRepository;
+use AppBundle\Repository\AbstractShowRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,10 +17,10 @@ class SubscriptionType extends AbstractType
             'subscribedShows',
             'document',
             [
-                'class' => Show::class,
+                'class' => AbstractShow::class,
                 'expanded' => true,
                 'multiple' => true,
-                'query_builder' => function (ShowRepository $repository) {
+                'query_builder' => function (AbstractShowRepository $repository) {
                     return $repository->findActiveShowsQueryBuilder();
                 },
             ]

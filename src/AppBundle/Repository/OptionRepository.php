@@ -13,7 +13,7 @@ class OptionRepository extends DocumentRepository
     public function getLastUpdateDate()
     {
         /** @var Option $option */
-        $option = $this->findOneBy(['id' => Option::LAST_UPDATE]);
+        $option = $this->findOneBy(['id' => Option::LOSTFILM_LAST_UPDATE]);
 
         return $option->getDateValue();
     }
@@ -21,7 +21,7 @@ class OptionRepository extends DocumentRepository
     public function setLastUpdateDate(\DateTime $date)
     {
         /** @var Option $option */
-        $option = $this->findOneBy(['id' => Option::LAST_UPDATE]);
+        $option = $this->findOneBy(['id' => Option::LOSTFILM_LAST_UPDATE]);
         $option->setDateValue($date);
 
         $this->getDocumentManager()->flush($option);

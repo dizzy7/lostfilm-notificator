@@ -4,10 +4,6 @@ services:
         tags:
             - { name: form.type, alias: app_user_registration }
 
-    app.http_grabber:
-        class: AppBundle\Service\HttpGrabber
-        arguments: [@guzzle.client.lostfilm]
-
     app.parser:
         class: AppBundle\Service\Parser
         arguments:
@@ -45,3 +41,19 @@ services:
             - @shaygan.telegram_bot_api
             - @monolog.logger.applog
             - @doctrine.odm.mongodb.document_manager
+
+    app.grabber.lostfilm:
+        class: AppBundle\Service\Grabber\LosftfilmGrabber
+        arguments:
+            - @doctrine.odm.mongodb.document_manager
+            - @simple_dom_parser
+            - @monolog.logger.applog
+            - @guzzle.client.lostfilm
+
+    app.grabber.animedia:
+        class: AppBundle\Service\Grabber\AnimediaGrabber
+        arguments:
+            - @doctrine.odm.mongodb.document_manager
+            - @simple_dom_parser
+            - @monolog.logger.applog
+            - @guzzle.client.animedia

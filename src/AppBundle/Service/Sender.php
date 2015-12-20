@@ -2,8 +2,8 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Document\AbstractShow;
 use AppBundle\Document\Episode;
-use AppBundle\Document\Show;
 use AppBundle\Document\User;
 use AppBundle\Service\Sender\MailSender;
 use AppBundle\Service\Sender\SenderInterface;
@@ -36,7 +36,7 @@ class Sender
 
     public function sendNewEpisodeNotifications()
     {
-        $showRepository = $this->dm->getRepository('AppBundle:Show');
+        $showRepository = $this->dm->getRepository('AppBundle:AbstractShow');
 
         $shows = $showRepository->findWithNewEpisodes();
 
@@ -53,7 +53,7 @@ class Sender
         $this->dm->flush();
     }
 
-    private function sendEpisodeNotification(Show $show, $message, $subject)
+    private function sendEpisodeNotification(AbstractShow $show, $message, $subject)
     {
         foreach ($show->getSubscribers() as $user) {
             try {
@@ -91,7 +91,7 @@ class Sender
         throw new \LogicException('Неизвестный способ оповещения');
     }
 
-    private function renderNotification(Show $show, Episode $episode)
+    private function renderNotification(AbstractShow $show, Episode $episode)
     {
         $message['html'] = $this->twig->render(
             'notification/notification.html.twig',
