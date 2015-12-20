@@ -10,8 +10,8 @@ parameters:
     mongo_log_collection: Log
     mongo_applog_collection: ApplicationLog
     grabbers:
-        - app.grabber.lostfilm
         - app.grabber.animedia
+        - app.grabber.lostfilm
 
 framework:
     #esi:             ~

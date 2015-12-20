@@ -84,6 +84,8 @@ class AnimediaGrabber implements GrabberInterface
                 $show->setTitle($showName);
                 $show->setUrl($node->getAttribute('href'));
                 $this->dm->persist($show);
+
+                $this->logger->info('Добавлено новый сериал animedia: ' . $showName);
             }
         }
 
