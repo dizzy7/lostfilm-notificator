@@ -13,7 +13,7 @@ class AbstractShowRepository extends DocumentRepository
     public function findWithNewEpisodes()
     {
         $qb = $this->createQueryBuilder();
-        $qb->field('episodes.notificationSended')->notEqual(true);
+        $qb->field('episodes')->elemMatch($qb->expr()->field('notificationSended')->notEqual(true));
 
         return $qb->getQuery()->execute();
     }
