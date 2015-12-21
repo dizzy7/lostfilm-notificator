@@ -180,7 +180,7 @@ abstract class AbstractShow
     public function getEpisodeByNumbers($seasonNumber, $episodeNumber)
     {
         $episodes = $this->getEpisodes()->filter(function (Episode $episode) use ($seasonNumber, $episodeNumber) {
-            return $episode->getSeasonNumber() === $seasonNumber && $episode->getEpisodeNumber() === $episodeNumber;
+            return $episode->getSeasonNumber() == $seasonNumber && $episode->getEpisodeNumber() == $episodeNumber;
         });
 
         if ($episodes->count() > 0) {
