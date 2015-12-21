@@ -5,20 +5,18 @@ namespace AppBundle\Service\Grabber;
 use AppBundle\Document\Episode;
 use AppBundle\Document\Link;
 use AppBundle\Document\LostfilmShow;
-use AppBundle\Repository\OptionRepository;
 use AppBundle\Service\HttpGrabber;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Sunra\PhpSimple\HtmlDomParser;
-use Symfony\Component\DependencyInjection\Tests\Compiler\H;
 
 class LosftfilmGrabber implements GrabberInterface
 {
     private $dm;
     private $domParser;
     private $logger;
-    /** @var HttpGrabber  */
+    /** @var HttpGrabber */
     private $httpGrabber;
 
     public function __construct(
@@ -26,8 +24,7 @@ class LosftfilmGrabber implements GrabberInterface
         HtmlDomParser $domParser,
         LoggerInterface $logger,
         Client $guzzle
-    )
-    {
+    ) {
         $this->dm = $dm;
         $this->domParser = $domParser;
         $this->logger = $logger;
@@ -45,7 +42,7 @@ class LosftfilmGrabber implements GrabberInterface
         try {
             $rssFeed = $this->httpGrabber->getPage('/rssdd.xml');
         } catch (\Exception $e) {
-            $this->logger->error('Ошибка загрузки rss:'.$e->getMessage());
+            $this->logger->error('Ошибка загрузки rss:' . $e->getMessage());
 
             return 1;
         }
@@ -59,7 +56,7 @@ class LosftfilmGrabber implements GrabberInterface
         try {
             $showsPage = iconv('windows-1251', 'utf-8', $this->httpGrabber->getPage('/serials.php'));
         } catch (\Exception $e) {
-            $this->logger->error('Ошибка загрузки страницы с сериалами: '.$e->getMessage());
+            $this->logger->error('Ошибка загрузки страницы с сериалами: ' . $e->getMessage());
 
             return;
         }
@@ -83,7 +80,7 @@ class LosftfilmGrabber implements GrabberInterface
                     $show->setUrl($showLink->attr['href']);
                     $this->dm->persist($show);
 
-                    $this->logger->info('Добавлен новый сериал: '.$name);
+                    $this->logger->info('Добавлен новый сериал: ' . $name);
                 }
             }
 
@@ -105,7 +102,7 @@ class LosftfilmGrabber implements GrabberInterface
 
                 sleep(mt_rand(1, 5));
             } catch (\Exception $e) {
-                $this->logger->error('Ошибка загрузки страницы сериала '.$show->getTitle().':'.$e->getMessage());
+                $this->logger->error('Ошибка загрузки страницы сериала ' . $show->getTitle() . ':' . $e->getMessage());
                 sleep(60);
             }
         }
@@ -118,38 +115,23 @@ class LosftfilmGrabber implements GrabberInterface
         $centerContent = $dom->find('div.mid')[0];
         if (mb_strpos($centerContent->text(), 'Статус: закончен', 0, 'UTF-8') !== false) {
             $show->setClosed(true);
-            $this->logger->info('Сериал "'.$show->getTitle().'" закрыт');
+            $this->logger->info('Сериал "' . $show->getTitle() . '" закрыт');
             $this->dm->flush();
         }
     }
 
-
     private function parseRss(\SimpleXMLElement $rss)
-    {
-        $lastRssBuildDate = \DateTime::createFromFormat(\DateTime::RSS, (string) $rss->channel->lastBuildDate);
-        /** @var OptionRepository $optionRepository */
-        $optionRepository = $this->dm->getRepository('AppBundle:Option');
-        $lastUpdate = $optionRepository->getLastUpdateDate();
-        if ($lastRssBuildDate > $lastUpdate) {
-            $this->parseEpisodes($rss);
-            $optionRepository->setLastUpdateDate($lastRssBuildDate);
-        }
-
-        return 0;
-    }
-
-    private function parseEpisodes(\SimpleXMLElement $rss)
     {
         $showRepository = $this->dm->getRepository('AppBundle:LostfilmShow');
 
         $shows = $showRepository->findAll();
         foreach ($rss->channel->item as $item) {
-            $title = (string) $item->title;
-            $link = (string) $item->link;
+            $title = (string)$item->title;
+            $link = (string)$item->link;
             $show = $this->findShowByEpisodeTitle($shows, $title);
 
             if ($show === null) {
-                $this->logger->error('Сериал для эпизода не найден:'.$title);
+                $this->logger->error('Сериал для эпизода не найден:' . $title);
                 continue;
             }
 
@@ -169,8 +151,8 @@ class LosftfilmGrabber implements GrabberInterface
 
         $matches = [];
         if (preg_match('/\(S(\d+)E(\d+)\)/', $title, $matches)) {
-            $seasonNumber = (int) $matches[1];
-            $episodeNumber = (int) $matches[2];
+            $seasonNumber = (int)$matches[1];
+            $episodeNumber = (int)$matches[2];
 
             $episode = $show->getEpisodeByNumbers($seasonNumber, $episodeNumber);
             if ($episode !== null) {

@@ -4,13 +4,6 @@ services:
         tags:
             - { name: form.type, alias: app_user_registration }
 
-    app.parser:
-        class: AppBundle\Service\Parser
-        arguments:
-            - @doctrine.odm.mongodb.document_manager
-            - @monolog.logger.applog
-            - @simple_dom_parser
-
     app.sender:
         class: AppBundle\Service\Sender
         arguments:
