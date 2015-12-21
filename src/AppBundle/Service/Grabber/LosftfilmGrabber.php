@@ -66,27 +66,31 @@ class LosftfilmGrabber implements GrabberInterface
 
         $showRepository = $this->dm->getRepository('AppBundle:LostfilmShow');
         $dom = $this->domParser->str_get_html($showsPage);
-        /** @var \simple_html_dom_node $centerContent */
-        $centerContent = $dom->find('div.mid')[0];
-        /** @var \simple_html_dom_node[] $showLinks */
-        $showLinks = $centerContent->find('a.bb_a');
+        if ($dom) {
+            /** @var \simple_html_dom_node $centerContent */
+            $centerContent = $dom->find('div.mid')[0];
+            /** @var \simple_html_dom_node[] $showLinks */
+            $showLinks = $centerContent->find('a.bb_a');
 
-        foreach ($showLinks as $showLink) {
-            $name = str_replace(["\n", "\r"], '', $showLink->text());
-            $show = $showRepository->findOneBy(['title' => $name]);
-            if ($show === null) {
-                $show = new LostfilmShow();
-                $show->setTitle($name);
-                $show->setCreatedAt(new \DateTime());
-                $show->setUpdatedAt(new \DateTime());
-                $show->setUrl($showLink->attr['href']);
-                $this->dm->persist($show);
+            foreach ($showLinks as $showLink) {
+                $name = str_replace(["\n", "\r"], '', $showLink->text());
+                $show = $showRepository->findOneBy(['title' => $name]);
+                if ($show === null) {
+                    $show = new LostfilmShow();
+                    $show->setTitle($name);
+                    $show->setCreatedAt(new \DateTime());
+                    $show->setUpdatedAt(new \DateTime());
+                    $show->setUrl($showLink->attr['href']);
+                    $this->dm->persist($show);
 
-                $this->logger->info('Добавлен новый сериал: '.$name);
+                    $this->logger->info('Добавлен новый сериал: '.$name);
+                }
             }
-        }
 
-        $this->dm->flush();
+            $this->dm->flush();
+        } else {
+            $this->logger->error('Ошибка парсинга страницы с сериалами: dom не обработан', ['page' => $showsPage]);
+        }
     }
 
     private function updateShowsStatus()
