@@ -4,7 +4,6 @@ namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
-
 /**
  * @MongoDB\Document(repositoryClass="AppBundle\Repository\LostfilmShowRepository")
  */

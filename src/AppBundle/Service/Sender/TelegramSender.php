@@ -24,7 +24,7 @@ class TelegramSender implements SenderInterface
         $this->logger->info(
             'Отправлено сообщение telegram пользователю '.$user->getEmail(),
             [
-                'text' => $text
+                'text' => $text,
             ]
         );
     }

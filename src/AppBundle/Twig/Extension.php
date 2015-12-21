@@ -14,7 +14,7 @@ class Extension extends \Twig_Extension
         return [
             new \Twig_SimpleTest('instanceof', function ($object, $class) {
                 return $object instanceof $class;
-            })
+            }),
         ];
     }
 }

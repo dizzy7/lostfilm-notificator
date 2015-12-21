@@ -17,6 +17,12 @@
         <div role="tabpanel" class="tab-pane active" id="lostfilm">
             <table class="table table-striped">
                 <tbody>
+                <tr class="new-shows-subscribe">
+                    <td>Подписка на уведомления о новых сериалах</td>
+                    <td class="td-checkbox"><input type="checkbox" data-show="lostfilm" data-off-label="false" data-on-label="false" data-off-icon-class="glyphicon glyphicon-remove" data-on-icon-class="glyphicon glyphicon-ok"
+                                                   {% if app.user.isSubscribedNewShows('lostfilm') %}checked{% endif %}></td>
+                    <td class="status"><img src="/images/loading_spinner.gif"></td>
+                </tr>
                 {% for show in shows if show is instanceof('AppBundle\\Document\\LostfilmShow') %}
                     <tr>
                         <td>{{ show.title }}</td>
@@ -31,6 +37,12 @@
         <div role="tabpanel" class="tab-pane" id="animedia">
             <table class="table table-striped">
                 <tbody>
+                <tr class="new-shows-subscribe">
+                    <td>Подписка на уведомления о новых сериалах</td>
+                    <td class="td-checkbox"><input type="checkbox" data-show="animedia" data-off-label="false" data-on-label="false" data-off-icon-class="glyphicon glyphicon-remove" data-on-icon-class="glyphicon glyphicon-ok"
+                                                   {% if app.user.isSubscribedNewShows('animedia') %}checked{% endif %}></td>
+                    <td class="status"><img src="/images/loading_spinner.gif"></td>
+                </tr>
                 {% for show in shows if show is instanceof('AppBundle\\Document\\AnimediaShow') %}
                     <tr>
                         <td>{{ show.title }}</td>
@@ -48,15 +60,31 @@
 {% block customjs %}
     <script type="text/javascript">
         $(function () {
-            var checkboxes = $('.tab-content :checkbox');
-            checkboxes.checkboxpicker();
-            checkboxes.change(function (e) {
+            var trs = $('.tab-content').find('tr');
+            trs.find('input[type=checkbox]').checkboxpicker();
+            trs.not('.new-shows-subscribe').find('input[type=checkbox]').change(function (e) {
                 var $element = $(this);
                 var id = $element.data('id');
                 $element.parent().next().find('img').css('visibility', 'visible');
                 var isChecked = $element.is(':checked');
                 $.post(
                         Routing.generate('app_default_togglesubscribe', {'id': id, 'action': isChecked ? 1 : 0}),
+                        function (data) {
+                            if (data.success) {
+                                $element.parent().next().find('img').css('visibility', 'hidden');
+                            } else {
+                                alert('Ошибка при сохранении');
+                            }
+                        }
+                )
+            });
+            trs.filter('.new-shows-subscribe').find('input[type=checkbox]').change(function (e) {
+                var $element = $(this);
+                var show = $element.data('show');
+                $element.parent().next().find('img').css('visibility', 'visible');
+                var isChecked = $element.is(':checked');
+                $.post(
+                        Routing.generate('app_default_togglesubscribenew', {'show': show, 'action': isChecked ? 1 : 0}),
                         function (data) {
                             if (data.success) {
                                 $element.parent().next().find('img').css('visibility', 'hidden');

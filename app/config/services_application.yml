@@ -13,6 +13,13 @@ services:
             - @app.sender.mail
             - @app.sender.telegram
 
+    app.listener.new_showw:
+        class: AppBundle\Listener\NewShowsListener
+        arguments:
+            - @app.sender
+        tags:
+            - { name: kernel.event_listener, event: app.new_show, method: onNewShow }
+
     app.sender.mail:
         class: AppBundle\Service\Sender\MailSender
         arguments:
@@ -42,6 +49,7 @@ services:
             - @simple_dom_parser
             - @monolog.logger.applog
             - @guzzle.client.lostfilm
+            - @event_dispatcher
 
     app.grabber.animedia:
         class: AppBundle\Service\Grabber\AnimediaGrabber
@@ -50,3 +58,4 @@ services:
             - @simple_dom_parser
             - @monolog.logger.applog
             - @guzzle.client.animedia
+            - @event_dispatcher

@@ -40,7 +40,7 @@ class TelegramReciver implements UpdateReceiverInterface
             'Сообщение из telegram',
             [
                 'user' => $this->user ? $this->user->getEmail() : 'new',
-                'message' => $message
+                'message' => $message,
             ]
         );
 

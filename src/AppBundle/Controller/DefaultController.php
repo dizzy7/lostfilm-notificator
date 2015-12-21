@@ -31,7 +31,7 @@ class DefaultController extends Controller
         return $this->render(
             'default/index.html.twig',
             [
-                'shows' => $shows
+                'shows' => $shows,
             ]
         );
     }
@@ -68,6 +68,37 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/subscribenew/{show}/{action}", options={"expose"=true})
+     * @Security("has_role('ROLE_USER')")
+     * @Method("POST")
+     */
+    public function toggleSubscribeNew($show, $action)
+    {
+        $shows = ['lostfilm', 'animedia'];
+
+        if (!in_array($show, $shows)) {
+            $this->createNotFoundException();
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($action) {
+            if (!$user->isSubscribedNewShows($show)) {
+                $user->addSubscribedNewShowsOnSite($show);
+            }
+        } else {
+            if ($user->isSubscribedNewShows($show)) {
+                $user->removeSubscribedNewShowsOnSite($show);
+            }
+        }
+
+        $dm = $this->get('doctrine.odm.mongodb.document_manager');
+        $dm->flush();
+
+        return new JsonResponse(['success' => true]);
+    }
+
+    /**
      * @Route("/feedback")
      */
     public function feedbackAction(Request $request)
@@ -85,7 +116,7 @@ class DefaultController extends Controller
             $message->setSubject('Обратная связь с сайта lf.dizzy.name');
             $message->setTo($this->getParameter('feedback_email'));
             $message->setFrom($this->getParameter('from_email'));
-            $body = 'Пользователь: ' . ($user ? $user->getEmail() : $form->get('email')->getData()) . "\n";
+            $body = 'Пользователь: '.($user ? $user->getEmail() : $form->get('email')->getData())."\n";
             $body .= $form->get('text')->getData();
             $message->setBody($body);
 
@@ -97,7 +128,7 @@ class DefaultController extends Controller
             'default/feedback.html.twig',
             [
                 'form' => $form->createView(),
-                'sended' => $sended
+                'sended' => $sended,
             ]
         );
     }

@@ -21,7 +21,7 @@ class FeedbackType extends AbstractType
                 'email',
                 'email',
                 [
-                    'label' => 'Email'
+                    'label' => 'Email',
                 ]
             );
         }
@@ -29,7 +29,7 @@ class FeedbackType extends AbstractType
             'text',
             'textarea',
             [
-                'label' => 'Сообщение'
+                'label' => 'Сообщение',
             ]
         );
     }

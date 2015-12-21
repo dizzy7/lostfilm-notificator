@@ -8,7 +8,8 @@ use FOS\UserBundle\Document\User as BaseUser;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="AppBundle\Repository\UserRepository")
+ * @MongoDB\HasLifecycleCallbacks()
  */
 class User extends BaseUser
 {
@@ -24,6 +25,11 @@ class User extends BaseUser
      * @MongoDB\ReferenceMany(targetDocument="AppBundle\Document\AbstractShow", inversedBy="subscribers")
      */
     private $subscribedShows;
+
+    /**
+     * @MongoDB\Collection()
+     */
+    private $subscribedNewShowsOnSite;
 
     /**
      * @MongoDB\Integer(value="1")
@@ -45,6 +51,17 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->subscribedShows = new ArrayCollection();
+        $this->subscribedNewShowsOnSite = [];
+    }
+
+    /**
+     * @MongoDB\PostLoad()
+     */
+    public function postLoad()
+    {
+        if ($this->subscribedNewShowsOnSite === null) {
+            $this->subscribedNewShowsOnSite = [];
+        }
     }
 
     /**
@@ -105,5 +122,28 @@ class User extends BaseUser
     public function isSubscribed(AbstractShow $show)
     {
         return $this->getSubscribedShows()->contains($show);
+    }
+
+    public function getSubscribedNewShowsOnSite()
+    {
+        return $this->subscribedNewShowsOnSite;
+    }
+
+    public function addSubscribedNewShowsOnSite($show)
+    {
+        $this->subscribedNewShowsOnSite[] = $show;
+    }
+
+    public function removeSubscribedNewShowsOnSite($show)
+    {
+        $key = array_search($show, $this->subscribedNewShowsOnSite);
+        if ($key !== false) {
+            unset($this->subscribedNewShowsOnSite[$key]);
+        }
+    }
+
+    public function isSubscribedNewShows($site)
+    {
+        return in_array($site, $this->subscribedNewShowsOnSite);
     }
 }

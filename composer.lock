@@ -137,16 +137,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.5.2",
+            "version": "v1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "47c7128262da274f590ae6f86eb137a7a64e82af"
+                "reference": "47cdc76ceb95cc591d9c79a36dc3794975b5d136"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/47c7128262da274f590ae6f86eb137a7a64e82af",
-                "reference": "47c7128262da274f590ae6f86eb137a7a64e82af",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/47cdc76ceb95cc591d9c79a36dc3794975b5d136",
+                "reference": "47cdc76ceb95cc591d9c79a36dc3794975b5d136",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +203,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-12-03 10:50:37"
+            "time": "2015-12-19 05:03:47"
         },
         {
             "name": "doctrine/collections",
@@ -1728,16 +1728,16 @@
         },
         {
             "name": "leafo/scssphp",
-            "version": "v0.6.1",
+            "version": "v0.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "fc8c73b7955b22b40792d716d42c8daa5b43a777"
+                "reference": "feecdbe1defcd89089e51bf89bf77e0332658517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/fc8c73b7955b22b40792d716d42c8daa5b43a777",
-                "reference": "fc8c73b7955b22b40792d716d42c8daa5b43a777",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/feecdbe1defcd89089e51bf89bf77e0332658517",
+                "reference": "feecdbe1defcd89089e51bf89bf77e0332658517",
                 "shasum": ""
             },
             "require": {
@@ -1746,7 +1746,7 @@
             "require-dev": {
                 "kherge/box": "~2.5",
                 "phpunit/phpunit": "~3.7",
-                "squizlabs/php_codesniffer": "~2.3"
+                "squizlabs/php_codesniffer": "~2.5"
             },
             "bin": [
                 "bin/pscss"
@@ -1777,7 +1777,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2015-12-13 08:03:38"
+            "time": "2015-12-16 22:46:24"
         },
         {
             "name": "monolog/monolog",
@@ -1993,16 +1993,16 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v5.0.2",
+            "version": "v5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "37bdfaa164396bec6ae00e37c23a6e187ad01bcc"
+                "reference": "419c1824af940e2be0f833aca2327e1181a6b503"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/37bdfaa164396bec6ae00e37c23a6e187ad01bcc",
-                "reference": "37bdfaa164396bec6ae00e37c23a6e187ad01bcc",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/419c1824af940e2be0f833aca2327e1181a6b503",
+                "reference": "419c1824af940e2be0f833aca2327e1181a6b503",
                 "shasum": ""
             },
             "require": {
@@ -2041,20 +2041,20 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2015-11-26 18:10:40"
+            "time": "2015-12-18 17:44:11"
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.11",
+            "version": "v3.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "a79e205737b58d557c05caef6dfa8f94d8084bca"
+                "reference": "3e8936fe13aa4086644977d334d8fcd275f50357"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/a79e205737b58d557c05caef6dfa8f94d8084bca",
-                "reference": "a79e205737b58d557c05caef6dfa8f94d8084bca",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/3e8936fe13aa4086644977d334d8fcd275f50357",
+                "reference": "3e8936fe13aa4086644977d334d8fcd275f50357",
                 "shasum": ""
             },
             "require": {
@@ -2096,7 +2096,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2015-10-28 15:47:04"
+            "time": "2015-12-18 17:39:27"
         },
         {
             "name": "sensiolabs/security-checker",
@@ -3060,16 +3060,16 @@
         },
         {
             "name": "telegram-bot/api",
-            "version": "v2.2.3",
+            "version": "v2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TelegramBot/Api.git",
-                "reference": "ae0a3d1d565c518b1f3f66307dfc8c5354d04f23"
+                "reference": "d4b883c53bc622e01d5582f6ff754ef9a8c001ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TelegramBot/Api/zipball/ae0a3d1d565c518b1f3f66307dfc8c5354d04f23",
-                "reference": "ae0a3d1d565c518b1f3f66307dfc8c5354d04f23",
+                "url": "https://api.github.com/repos/TelegramBot/Api/zipball/d4b883c53bc622e01d5582f6ff754ef9a8c001ad",
+                "reference": "d4b883c53bc622e01d5582f6ff754ef9a8c001ad",
                 "shasum": ""
             },
             "require": {
@@ -3111,7 +3111,7 @@
                 "php",
                 "telegram"
             ],
-            "time": "2015-12-12 12:49:37"
+            "time": "2015-12-18 09:12:31"
         },
         {
             "name": "twbs/bootstrap-sass",
@@ -3377,16 +3377,16 @@
         },
         {
             "name": "sensio/generator-bundle",
-            "version": "v3.0.1",
+            "version": "v3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "ca4d3a13387111acff157112ed88360d84831430"
+                "reference": "525e078ff7d5e9f19b0ef912bb6d6753673b3c66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/ca4d3a13387111acff157112ed88360d84831430",
-                "reference": "ca4d3a13387111acff157112ed88360d84831430",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/525e078ff7d5e9f19b0ef912bb6d6753673b3c66",
+                "reference": "525e078ff7d5e9f19b0ef912bb6d6753673b3c66",
                 "shasum": ""
             },
             "require": {
@@ -3425,7 +3425,7 @@
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2015-12-08 18:08:03"
+            "time": "2015-12-20 20:01:41"
         },
         {
             "name": "symfony/phpunit-bridge",

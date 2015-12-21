@@ -67,7 +67,8 @@ abstract class AbstractShow
     /**
      * @MongoDB\PrePersist()
      */
-    public function updateCreatedAt(){
+    public function updateCreatedAt()
+    {
         $this->createdAt = new \DateTime();
     }
 

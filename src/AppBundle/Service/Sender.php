@@ -3,7 +3,9 @@
 namespace AppBundle\Service;
 
 use AppBundle\Document\AbstractShow;
+use AppBundle\Document\AnimediaShow;
 use AppBundle\Document\Episode;
+use AppBundle\Document\LostfilmShow;
 use AppBundle\Document\User;
 use AppBundle\Service\Sender\MailSender;
 use AppBundle\Service\Sender\SenderInterface;
@@ -43,7 +45,7 @@ class Sender
         foreach ($shows as $show) {
             $episodes = $show->getNewEpisodes();
             foreach ($episodes as $episode) {
-                $message = $this->renderNotification($show, $episode);
+                $message = $this->renderEpisodeNotification($show, $episode);
                 $subject = 'Новая серия сериала '.$show->getTitle();
                 $this->sendEpisodeNotification($show, $message, $subject);
                 $episode->setNotificationSended(true);
@@ -56,24 +58,7 @@ class Sender
     private function sendEpisodeNotification(AbstractShow $show, $message, $subject)
     {
         foreach ($show->getSubscribers() as $user) {
-            try {
-                $senderService = $this->getSenderForUser($user);
-                if ($senderService->isHtmlSupported()) {
-                    $senderService->sendNotification($user, $message['html'], $subject);
-                } elseif ($senderService->isMarkdownSupported()) {
-                    $senderService->sendNotification($user, $message['markdown'], $subject);
-                } else {
-                    $senderService->sendNotification($user, $message['text'], $subject);
-                }
-            } catch (\LogicException $e) {
-                $this->logger->critical(
-                    'Неизвестный тип оповещения',
-                    [
-                        'user' => $user->getId(),
-                        'email' => $user->getEmail(),
-                    ]
-                );
-            }
+            $this->sendToUser($user, $message, $subject);
         }
     }
 
@@ -91,30 +76,75 @@ class Sender
         throw new \LogicException('Неизвестный способ оповещения');
     }
 
-    private function renderNotification(AbstractShow $show, Episode $episode)
+    private function renderEpisodeNotification(AbstractShow $show, Episode $episode)
     {
-        $message['html'] = $this->twig->render(
-            'notification/notification.html.twig',
-            [
-                'show' => $show,
-                'episode' => $episode,
-            ]
-        );
-        $message['markdown'] = $this->twig->render(
-            'notification/notification.markdown.twig',
-            [
-                'show' => $show,
-                'episode' => $episode,
-            ]
-        );
-        $message['text'] = $this->twig->render(
-            'notification/notification.text.twig',
-            [
-                'show' => $show,
-                'episode' => $episode,
-            ]
-        );
+        $message = [];
+        $formats = ['html', 'markdown', 'text'];
+        foreach ($formats as $format) {
+            $message[$format] = $this->twig->render(
+                'notification/notification.'.$format.'.twig',
+                [
+                    'show' => $show,
+                    'episode' => $episode,
+                ]
+            );
+        }
 
         return $message;
+    }
+
+    public function sendNewShowNotification(AbstractShow $show)
+    {
+        $message = $this->renderShowNotification($show);
+        $subject = 'Вышел новый сериал: '.$show->getTitle();
+        if ($show instanceof LostfilmShow) {
+            $users = $this->dm->getRepository('AppBundle:User')->findAllSiteSubscribers('lostfilm');
+        } elseif ($show instanceof AnimediaShow) {
+            $users = $this->dm->getRepository('AppBundle:User')->findAllSiteSubscribers('animedia');
+        } else {
+            $users = [];
+        }
+
+        foreach ($users as $user) {
+            $this->sendToUser($user, $message, $subject);
+        }
+    }
+
+    private function renderShowNotification(AbstractShow $show)
+    {
+        $message = [];
+        $formats = ['html', 'markdown', 'text'];
+        foreach ($formats as $format) {
+            $message[$format] = $this->twig->render(
+                'notification/showNotification.'.$format.'.twig',
+                [
+                    'show' => $show,
+                ]
+            );
+        }
+
+        return $message;
+    }
+
+    private function sendToUser(User $user, $message, $subject)
+    {
+        try {
+            $senderService = $this->getSenderForUser($user);
+            if ($senderService->isHtmlSupported()) {
+                $senderService->sendNotification($user, $message['html'], $subject);
+            } elseif ($senderService->isMarkdownSupported()) {
+                $senderService->sendNotification($user, $message['markdown'], $subject);
+            } else {
+                $senderService->sendNotification($user, $message['text'], $subject);
+            }
+        } catch (\LogicException $e) {
+            $this->logger->critical(
+                'Неизвестный тип оповещения',
+                [
+                    'user' => $user->getId(),
+                    'email' => $user->getEmail(),
+                ]
+            );
+        }
     }
 }

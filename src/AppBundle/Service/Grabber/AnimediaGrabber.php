@@ -5,20 +5,20 @@ namespace AppBundle\Service\Grabber;
 use AppBundle\Document\AnimediaShow;
 use AppBundle\Document\Episode;
 use AppBundle\Document\Link;
-use AppBundle\Document\LostfilmShow;
-use AppBundle\Repository\OptionRepository;
+use AppBundle\Event\NewShowEvent;
 use AppBundle\Service\HttpGrabber;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Sunra\PhpSimple\HtmlDomParser;
-use Symfony\Component\DependencyInjection\Tests\Compiler\H;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AnimediaGrabber implements GrabberInterface
 {
     private $dm;
     private $domParser;
     private $logger;
+    private $eventDispatcher;
     /** @var HttpGrabber */
     private $httpGrabber;
 
@@ -26,12 +26,14 @@ class AnimediaGrabber implements GrabberInterface
         DocumentManager $dm,
         HtmlDomParser $domParser,
         LoggerInterface $logger,
-        Client $guzzle
+        Client $guzzle,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->dm = $dm;
         $this->domParser = $domParser;
         $this->logger = $logger;
         $this->httpGrabber = new HttpGrabber($guzzle);
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function updateShows()
@@ -45,7 +47,7 @@ class AnimediaGrabber implements GrabberInterface
         try {
             $page = $this->httpGrabber->getPage('/new');
         } catch (\Exception $e) {
-            $this->logger->error('Ошибка загрузки страницы с сериалами: ' . $e->getMessage());
+            $this->logger->error('Ошибка загрузки страницы с сериалами: '.$e->getMessage());
 
             return;
         }
@@ -58,7 +60,7 @@ class AnimediaGrabber implements GrabberInterface
         try {
             $page = $this->httpGrabber->getPage('/site/list?limit=1000');
         } catch (\Exception $e) {
-            $this->logger->error('Ошибка загрузки страницы с сериалами: ' . $e->getMessage());
+            $this->logger->error('Ошибка загрузки страницы с сериалами: '.$e->getMessage());
 
             return;
         }
@@ -85,7 +87,9 @@ class AnimediaGrabber implements GrabberInterface
                 $show->setUrl($node->getAttribute('href'));
                 $this->dm->persist($show);
 
-                $this->logger->info('Добавлено новый сериал animedia: ' . $showName);
+                $this->eventDispatcher->dispatch(NewShowEvent::EVENT_NAME, new NewShowEvent($show));
+
+                $this->logger->info('Добавлено новый сериал animedia: '.$showName);
             }
         }
 
@@ -104,7 +108,7 @@ class AnimediaGrabber implements GrabberInterface
 
                 sleep(mt_rand(1, 5));
             } catch (\Exception $e) {
-                $this->logger->error('Ошибка загрузки страницы сериала ' . $show->getTitle() . ':' . $e->getMessage());
+                $this->logger->error('Ошибка загрузки страницы сериала '.$show->getTitle().':'.$e->getMessage());
                 sleep(60);
             }
         }
@@ -141,13 +145,13 @@ class AnimediaGrabber implements GrabberInterface
             $showTitle = $node->getAttribute('title');
             $show = $animediaShowRepository->findOneBy(['title' => $showTitle]);
             if ($show) {
-                $url = 'http://online.animedia.tv' . $node->getAttribute('href');
+                $url = 'http://online.animedia.tv'.$node->getAttribute('href');
                 $matches = [];
                 if (preg_match('#Серия\s(\d+)\sиз#u', $node->parentNode->nodeValue, $matches)) {
-                    $episode = $show->getEpisodeByNumbers(null, (int)$matches[1]);
+                    $episode = $show->getEpisodeByNumbers(null, (int) $matches[1]);
                     if (!$episode) {
                         $episode = new Episode();
-                        $episode->setEpisodeNumber((int)$matches[1]);
+                        $episode->setEpisodeNumber((int) $matches[1]);
 
                         $link = new Link();
                         $link->setUrl($url);
@@ -156,12 +160,11 @@ class AnimediaGrabber implements GrabberInterface
 
                         $show->addEpisode($episode);
 
-                        $this->logger->info('Новая серия сериала на animedia:' . $showTitle);
+                        $this->logger->info('Новая серия сериала на animedia:'.$showTitle);
                     }
-
                 }
             } else {
-                $this->logger->error('Сериал на animedia не найден:' . $showTitle);
+                $this->logger->error('Сериал на animedia не найден:'.$showTitle);
             }
         }
         $this->dm->flush();
