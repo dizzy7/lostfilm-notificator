@@ -2,7 +2,7 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Document\Show;
+use AppBundle\Document\AbstractShow;
 use AppBundle\Document\User;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Psr\Log\LoggerInterface;
@@ -38,9 +38,9 @@ class TelegramReciver implements UpdateReceiverInterface
         $this->findUser($message['chat']['id']);
         $this->logger->info(
             'Сообщение из telegram',
-            $message,
             [
-                'user' => $this->user ? $this->user->getEmail() : 'new'
+                'user' => $this->user ? $this->user->getEmail() : 'new',
+                'message' => $message
             ]
         );
 
@@ -92,7 +92,7 @@ class TelegramReciver implements UpdateReceiverInterface
 
     private function getShowsList()
     {
-        $shows = $this->user->getSubscribedShows()->map(function (Show $show) {
+        $shows = $this->user->getSubscribedShows()->map(function (AbstractShow $show) {
             return $show->getTitle();
         })->toArray();
 
