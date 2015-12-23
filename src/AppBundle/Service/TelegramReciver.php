@@ -67,7 +67,7 @@ class TelegramReciver implements UpdateReceiverInterface
             if ($command === '/sites') {
                 $text = $this->sitesListCommand();
             } elseif ($command === '/list') {
-                $text = implode("\n", $this->getShowsList());
+                $text = $this->getShowsList();
             } elseif (preg_match('#/site_(.*?)_list#', $command, $matches)) {
                 $text = $this->siteShowsList($matches[1]);
             } elseif (preg_match('#/subscribe_site_(.*)#', $command, $matches)) {
@@ -82,7 +82,14 @@ class TelegramReciver implements UpdateReceiverInterface
                 $text = $this->helpCommand();
             }
 
-            $this->botApi->sendMessage($message['chat']['id'], $text);
+            if (is_array($text)) {
+                $chunks = array_chunk($text, 25);
+                foreach ($chunks as $chunk) {
+                    $this->botApi->sendMessage($message['chat']['id'], implode("\n", $chunk));
+                }
+            } else {
+                $this->botApi->sendMessage($message['chat']['id'], $text);
+            }
         }
     }
 
@@ -178,7 +185,7 @@ class TelegramReciver implements UpdateReceiverInterface
             /** @var AbstractShow $show */
             $show = $this->dm->getRepository($site)->findOneBy([]);
             $text[] = $show->getSiteUrl();
-            $text[] = 'Подписаться на новые сериалы: /subscribe_site' . $key;
+            $text[] = 'Подписаться на новые сериалы: /subscribe_site_' . $key;
             $text[] = sprintf('Список сериалов на сайте: /site_%s_list', $key);
             $text[] = '';
         }
@@ -202,7 +209,7 @@ class TelegramReciver implements UpdateReceiverInterface
             $text[] = sprintf('%s   подписаться /subscribe_%s', $show->getTitle(), $show->getId());
         }
 
-        return implode($text, "\n");
+        return $text;
     }
 
     private function subscribeShow($showId)
