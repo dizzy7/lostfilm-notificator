@@ -68,15 +68,15 @@ class TelegramReciver implements UpdateReceiverInterface
                 $text = $this->sitesListCommand();
             } elseif ($command === '/list') {
                 $text = implode("\n", $this->getShowsList());
-            } elseif (preg_match('#/site/(.*?)/list#', $command, $matches)) {
+            } elseif (preg_match('#/site_(.*?)_list#', $command, $matches)) {
                 $text = $this->siteShowsList($matches[1]);
-            } elseif (preg_match('#/subscribe/site/(.*)#', $command, $matches)) {
+            } elseif (preg_match('#/subscribe_site_(.*)#', $command, $matches)) {
                 $text = $this->subscribeNewShows($matches[1]);
-            } elseif (preg_match('#/subscribe/(.*)#', $command, $matches)) {
+            } elseif (preg_match('#/subscribe_(.*)#', $command, $matches)) {
                 $text = $this->subscribeShow($matches[1]);
-            } elseif (preg_match('#/unsubscribe/site/(.*)#', $command, $matches)) {
+            } elseif (preg_match('#/unsubscribe_site_(.*)#', $command, $matches)) {
                 $text = $this->unsubscribeNewShows($matches[1]);
-            } elseif (preg_match('#/unsubscribe/(.*)#', $command, $matches)) {
+            } elseif (preg_match('#/unsubscribe_(.*)#', $command, $matches)) {
                 $text = $this->unsubscribeShow($matches[1]);
             } else {
                 $text = $this->helpCommand();
@@ -117,13 +117,13 @@ class TelegramReciver implements UpdateReceiverInterface
 
         $text[] = 'http://www.lostfilm.tv';
         foreach ($lostfilmShows as $show) {
-            $text[] = sprintf('%s   отписаться: /unsubscribe/%s', $show->getTitle(), $show->getId());
+            $text[] = sprintf('%s   отписаться: /unsubscribe_%s', $show->getTitle(), $show->getId());
         }
         $text[] = '';
 
         $text[] = 'http://online.animedia.tv';
         foreach ($animediaShows as $show) {
-            $text[] = sprintf('%s   отписаться: /unsubscribe/%s', $show->getTitle(), $show->getId());
+            $text[] = sprintf('%s   отписаться: /unsubscribe_%s', $show->getTitle(), $show->getId());
         }
 
         return $text;
@@ -178,8 +178,8 @@ class TelegramReciver implements UpdateReceiverInterface
             /** @var AbstractShow $show */
             $show = $this->dm->getRepository($site)->findOneBy([]);
             $text[] = $show->getSiteUrl();
-            $text[] = 'Подписаться на новые сериалы: /subscribe/site/' . $key;
-            $text[] = sprintf('Список сериалов на сайте: /site/%s/list', $key);
+            $text[] = 'Подписаться на новые сериалы: /subscribe_site' . $key;
+            $text[] = sprintf('Список сериалов на сайте: /site_%s_list', $key);
             $text[] = '';
         }
 
@@ -199,7 +199,7 @@ class TelegramReciver implements UpdateReceiverInterface
 
         $text = [];
         foreach ($shows as $show) {
-            $text[] = sprintf('%s   подписаться /subscribe/%s', $show->getTitle(), $show->getId());
+            $text[] = sprintf('%s   подписаться /subscribe_%s', $show->getTitle(), $show->getId());
         }
 
         return implode($text, "\n");
