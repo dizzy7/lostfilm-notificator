@@ -124,6 +124,9 @@ class User extends BaseUser
         return $this->getSubscribedShows()->contains($show);
     }
 
+    /**
+     * @return array
+     */
     public function getSubscribedNewShowsOnSite()
     {
         return $this->subscribedNewShowsOnSite;
