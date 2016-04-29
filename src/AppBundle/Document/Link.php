@@ -10,12 +10,12 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class Link
 {
     /**
-     * @MongoDB\String()
+     * @MongoDB\Field(type="string")
      */
     private $resolution;
 
     /**
-     * @MongoDB\String()
+     * @MongoDB\Field(type="string")
      */
     private $url;
 

@@ -22,7 +22,7 @@ class Episode
     private $episodeNumber;
 
     /**
-     * @MongoDB\String()
+     * @MongoDB\Field(type="string")
      */
     private $title;
 

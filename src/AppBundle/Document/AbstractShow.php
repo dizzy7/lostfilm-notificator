@@ -23,12 +23,12 @@ abstract class AbstractShow
     private $id;
 
     /**
-     * @MongoDB\String()
+     * @MongoDB\Field(type="string")
      */
     private $title;
 
     /**
-     * @MongoDB\String()
+     * @MongoDB\Field(type="string")
      */
     private $url;
 

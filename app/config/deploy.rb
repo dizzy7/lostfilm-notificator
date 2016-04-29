@@ -2,12 +2,12 @@
 
 set :application, "set your application name here"
 set :domain,      "dizzy.name"
-set :deploy_to,   "/home/lostfilm/web/lf.dizzy.name/public_html"
+set :deploy_to,   "/var/www/lf.dizzy.name"
 set :app_path,    "app"
 
 set :repository,  "https://github.com/dizzy7/lostfilm-notificator.git"
 set :scm,         :git
-set :user,        "lostfilm"
+set :user,        "www-data"
 set :use_sudo,    false
 
 #set :model_manager, "doctrine"
