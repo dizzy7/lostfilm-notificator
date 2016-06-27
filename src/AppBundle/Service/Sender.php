@@ -47,12 +47,11 @@ class Sender
             foreach ($episodes as $episode) {
                 $message = $this->renderEpisodeNotification($show, $episode);
                 $subject = 'Новая серия сериала '.$show->getTitle();
-                $this->sendEpisodeNotification($show, $message, $subject);
                 $episode->setNotificationSended(true);
+                $this->dm->flush();
+                $this->sendEpisodeNotification($show, $message, $subject);
             }
         }
-
-        $this->dm->flush();
     }
 
     private function sendEpisodeNotification(AbstractShow $show, $message, $subject)
